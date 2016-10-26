@@ -5,6 +5,10 @@ VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POSD-Tema1", "POSD-Tema1\POSD-Tema1.csproj", "{73DEAFD2-69C6-48AB-A5D4-A1E9C5F41F7F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POSD-Tema1.Data", "POSD-Tema1.Data\POSD-Tema1.Data.csproj", "{EA6804B5-83D2-448C-8712-855FAB8B12DC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "POSD-Tema1.Services", "POSD-Tema1.Services\POSD-Tema1.Services.csproj", "{9358DD8B-32F4-4366-BF4C-1F75D785C4FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{73DEAFD2-69C6-48AB-A5D4-A1E9C5F41F7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73DEAFD2-69C6-48AB-A5D4-A1E9C5F41F7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73DEAFD2-69C6-48AB-A5D4-A1E9C5F41F7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA6804B5-83D2-448C-8712-855FAB8B12DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA6804B5-83D2-448C-8712-855FAB8B12DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA6804B5-83D2-448C-8712-855FAB8B12DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA6804B5-83D2-448C-8712-855FAB8B12DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9358DD8B-32F4-4366-BF4C-1F75D785C4FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9358DD8B-32F4-4366-BF4C-1F75D785C4FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9358DD8B-32F4-4366-BF4C-1F75D785C4FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9358DD8B-32F4-4366-BF4C-1F75D785C4FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

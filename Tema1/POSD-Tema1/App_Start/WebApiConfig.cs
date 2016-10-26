@@ -10,6 +10,12 @@ namespace POSD_Tema1
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
+
+            var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
+            //json.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+            //json.SerializerSettings.Converters.Add(new DateTimeConverter());
+            json.SerializerSettings.PreserveReferencesHandling = Newtonsoft.Json.PreserveReferencesHandling.None;
 
             // Web API routes
             config.MapHttpAttributeRoutes();
