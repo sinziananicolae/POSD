@@ -1,4 +1,6 @@
-﻿using POSD_Tema1.Services;
+﻿using POSD_Tema1.Models;
+using POSD_Tema1.Services;
+using POSD_Tema1.Services.UserService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,36 +13,55 @@ namespace POSD_Tema1.ControllersAPI
     public class ResourceController : ApiController
     {
         private ResourceService _resourceService;
+        private UserService _userService;
 
-        public ResourceController() {
+        public ResourceController()
+        {
             _resourceService = new ResourceService();
+            _userService = new UserService();
         }
 
-        // GET api/<controller>
         public IEnumerable<object> Get()
         {
             return _resourceService.GetResourceTypes();
         }
 
-        // GET api/<controller>/5
-        public string Get(int id)
+        [HttpPost]
+        [Route("api/create-resource")]
+        public Response CreateResource([FromBody] ResourceModel resourceModel)
         {
-            return "value";
+            Response reqResponse = new Response();
+
+            int userId = _userService.GetUser(resourceModel.username, resourceModel.password);
+            if (userId == -1) {
+                reqResponse.SetResponse(401, "Not Authorized", "Invalid credentials inserted!");
+                goto Finish;
+            }
+
+            ResourcePathModel resourceInfo = new ResourcePathModel(resourceModel.resourceName);
+
+            if (!_resourceService.IsPathValid(resourceInfo.resourcePath)) {
+                reqResponse.SetResponse(404, "Not Existing", resourceInfo.resourcePath + " does not exist in the current filesystem.");
+                goto Finish;
+            }
+
+            if (!_resourceService.CheckResourceOwner(resourceInfo.resourcePath, userId))
+            {
+                reqResponse.SetResponse(401, "Not Authorized", "You do not have the rights to access this resource. Please contact the owner of the selected folder.");
+                goto Finish;
+            }
+
+            if (!_resourceService.IsResourceUnique(resourceInfo.fullResourcePath))
+            {
+                reqResponse.SetResponse(500, "Already Existing", resourceInfo.fullResourcePath + " already exists in the current filesystem.");
+                goto Finish;
+            }
+
+            _resourceService.CreateResource(resourceInfo.resourceName, resourceInfo.fullResourcePath, userId, resourceModel.resourceTypeId, resourceModel.value);
+
+        Finish:
+            return reqResponse;
         }
 
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
-        }
     }
 }

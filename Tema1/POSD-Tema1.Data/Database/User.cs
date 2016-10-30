@@ -17,6 +17,7 @@ namespace POSD_Tema1.Data.Database
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
+            this.Resources = new HashSet<Resource>();
             this.ResourceForUsers = new HashSet<ResourceForUser>();
         }
     
@@ -24,6 +25,8 @@ namespace POSD_Tema1.Data.Database
         public string Username { get; set; }
         public string Password { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Resource> Resources { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ResourceForUser> ResourceForUsers { get; set; }
     }
