@@ -5,22 +5,19 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="b8a164e7804f49038503cea08fb4d67c" Name="Diagram1">
-        <EntityTypeShape EntityType="Model.C__MigrationHistory" Width="1.5" PointX="7.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Model.AspNetRole" Width="1.5" PointX="2.75" PointY="6.5" />
-        <EntityTypeShape EntityType="Model.AspNetUserClaim" Width="1.5" PointX="7.25" PointY="5" />
-        <EntityTypeShape EntityType="Model.AspNetUserLogin" Width="1.5" PointX="7.25" PointY="7.75" />
-        <EntityTypeShape EntityType="Model.AspNetUser" Width="1.5" PointX="5" PointY="5.375" />
-        <EntityTypeShape EntityType="Model.Resource" Width="1.5" PointX="3" PointY="1" />
-        <EntityTypeShape EntityType="Model.ResourceForUser" Width="1.5" PointX="5.25" PointY="1.125" />
-        <EntityTypeShape EntityType="Model.ResourceType" Width="1.5" PointX="0.75" PointY="5.5" />
-        <EntityTypeShape EntityType="Model.sysdiagram" Width="1.5" PointX="9.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="0.75" PointY="1.375" />
+        <EntityTypeShape EntityType="Model.C__MigrationHistory" Width="1.5" PointX="5.75" PointY="6.75" />
+        <EntityTypeShape EntityType="Model.AspNetRole" Width="1.5" PointX="0.75" PointY="2.5" />
+        <EntityTypeShape EntityType="Model.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1" />
+        <EntityTypeShape EntityType="Model.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="3.75" />
+        <EntityTypeShape EntityType="Model.AspNetUser" Width="1.5" PointX="3" PointY="1.375" />
+        <EntityTypeShape EntityType="Model.Resource" Width="1.5" PointX="3" PointY="7" />
+        <EntityTypeShape EntityType="Model.ResourceType" Width="1.5" PointX="0.75" PointY="7.625" />
+        <EntityTypeShape EntityType="Model.sysdiagram" Width="1.5" PointX="7.75" PointY="0.75" />
+        <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="0.75" PointY="10.5" />
         <AssociationConnector Association="Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="Model.FK__Resource__Parent__33D4B598" />
         <AssociationConnector Association="Model.FK__Resource__Resour__31EC6D26" />
-        <AssociationConnector Association="Model.FK__ResourceF__Resou__37A5467C" />
-        <AssociationConnector Association="Model.FK__ResourceF__UserI__36B12243" />
         <AssociationConnector Association="Model.AspNetUserRoles" />
       </Diagram>
     </edmx:Diagrams>

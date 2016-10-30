@@ -84,9 +84,6 @@
     <Compile Include="Database\Resource.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Database\ResourceForUser.cs">
-      <DependentUpon>DbEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="Database\ResourceType.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>

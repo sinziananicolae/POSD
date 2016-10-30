@@ -14,22 +14,16 @@ namespace POSD_Tema1.Data.Database
     
     public partial class Resource
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Resource()
-        {
-            this.ResourceForUsers = new HashSet<ResourceForUser>();
-        }
-    
         public int Id { get; set; }
         public string Name { get; set; }
         public int ResourceTypeId { get; set; }
         public Nullable<int> OwnerId { get; set; }
         public string Content { get; set; }
         public string FullPath { get; set; }
+        public Nullable<bool> Read { get; set; }
+        public Nullable<bool> Write { get; set; }
     
         public virtual User User { get; set; }
         public virtual ResourceType ResourceType { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ResourceForUser> ResourceForUsers { get; set; }
     }
 }

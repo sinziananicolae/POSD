@@ -33,7 +33,6 @@ namespace POSD_Tema1.Data.Database
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Resource> Resources { get; set; }
-        public virtual DbSet<ResourceForUser> ResourceForUsers { get; set; }
         public virtual DbSet<ResourceType> ResourceTypes { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<User> Users { get; set; }

@@ -18,7 +18,6 @@ namespace POSD_Tema1.Data.Database
         public User()
         {
             this.Resources = new HashSet<Resource>();
-            this.ResourceForUsers = new HashSet<ResourceForUser>();
         }
     
         public int Id { get; set; }
@@ -27,7 +26,5 @@ namespace POSD_Tema1.Data.Database
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Resource> Resources { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ResourceForUser> ResourceForUsers { get; set; }
     }
 }
