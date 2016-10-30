@@ -95,5 +95,42 @@ namespace POSD_Tema1.ControllersAPI
             return reqResponse;
         }
 
+        [HttpPost]
+        [Route("api/write-resource")]
+        public Response WriteResource([FromBody] ResourceModel resourceModel)
+        {
+            Response reqResponse = new Response();
+
+            int userId = _userService.GetUser(resourceModel.username, resourceModel.password);
+            if (userId == -1)
+            {
+                reqResponse.SetResponse(401, "Not Authorized", "Invalid credentials inserted!", null);
+                goto Finish;
+            }
+
+            if (_resourceService.IsResourceUnique(resourceModel.resourceName))
+            {
+                reqResponse.SetResponse(404, "Not Existing", resourceModel.resourceName + " does not exist in the current filesystem.", null);
+                goto Finish;
+            }
+
+            if (!_resourceService.CheckResourceRights(resourceModel.resourceName, userId))
+            {
+                reqResponse.SetResponse(401, "Not Authorized", "You do not have the rights to access this resource. Please contact the owner of the selected folder.", null);
+                goto Finish;
+            }
+
+            if (!_resourceService.IsFile(resourceModel.resourceName))
+            {
+                reqResponse.SetResponse(401, "Not Authorized", "You cannot write inside a directory.", null);
+                goto Finish;
+            }
+
+            _resourceService.WriteInFile(resourceModel.resourceName, resourceModel.value);
+
+        Finish:
+            return reqResponse;
+        }
+
     }
 }

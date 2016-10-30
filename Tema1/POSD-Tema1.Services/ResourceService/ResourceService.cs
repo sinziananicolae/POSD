@@ -111,5 +111,21 @@ namespace POSD_Tema1.Services
                 };
             }
         }
+
+        public bool IsFile(string resourceName)
+        {
+            var resource = _dbEntities.Resources.Where(f => f.FullPath == resourceName).FirstOrDefault();
+
+            if (resource.ResourceTypeId == 2)
+                return true;
+
+            return false;
+        }
+
+        public void WriteInFile(string resourceName, string value) {
+            var resource = _dbEntities.Resources.Where(f => f.FullPath == resourceName).FirstOrDefault();
+            resource.Content = resource.Content + value;
+            _dbEntities.SaveChanges();
+        }
     }
 }
