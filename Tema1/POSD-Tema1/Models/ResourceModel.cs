@@ -13,5 +13,6 @@ namespace POSD_Tema1.Models
         public string resourceName { get; set; }
         public int resourceTypeId { get; set; }
         public string value { get; set; }
+        public string rights { get; set; }
     }
 }

@@ -57,7 +57,7 @@ namespace POSD_Tema1.ControllersAPI
                 goto Finish;
             }
 
-            _resourceService.CreateResource(resourceInfo.resourceName, resourceInfo.fullResourcePath, userId, resourceModel.resourceTypeId, resourceModel.value);
+            _resourceService.CreateResource(resourceInfo.resourceName, resourceInfo.fullResourcePath, resourceInfo.resourcePath, userId, resourceModel.resourceTypeId, resourceModel.value);
 
         Finish:
             return reqResponse;
@@ -82,7 +82,7 @@ namespace POSD_Tema1.ControllersAPI
                 goto Finish;
             }
 
-            if (!_resourceService.CheckResourceRights(resourceModel.resourceName, userId))
+            if (!_resourceService.CheckResourceRights(resourceModel.resourceName, userId, "r"))
             {
                 reqResponse.SetResponse(401, "Not Authorized", "You do not have the rights to access this resource. Please contact the owner of the selected folder.", null);
                 goto Finish;
@@ -114,7 +114,7 @@ namespace POSD_Tema1.ControllersAPI
                 goto Finish;
             }
 
-            if (!_resourceService.CheckResourceRights(resourceModel.resourceName, userId))
+            if (!_resourceService.CheckResourceRights(resourceModel.resourceName, userId, "w"))
             {
                 reqResponse.SetResponse(401, "Not Authorized", "You do not have the rights to access this resource. Please contact the owner of the selected folder.", null);
                 goto Finish;
@@ -127,6 +127,37 @@ namespace POSD_Tema1.ControllersAPI
             }
 
             _resourceService.WriteInFile(resourceModel.resourceName, resourceModel.value);
+
+        Finish:
+            return reqResponse;
+        }
+
+        [HttpPost]
+        [Route("api/change-rights")]
+        public Response ChangeRights([FromBody] ResourceModel resourceModel)
+        {
+            Response reqResponse = new Response();
+
+            int userId = _userService.GetUser(resourceModel.username, resourceModel.password);
+            if (userId == -1)
+            {
+                reqResponse.SetResponse(401, "Not Authorized", "Invalid credentials inserted!", null);
+                goto Finish;
+            }
+
+            if (_resourceService.IsResourceUnique(resourceModel.resourceName))
+            {
+                reqResponse.SetResponse(404, "Not Existing", resourceModel.resourceName + " does not exist in the current filesystem.", null);
+                goto Finish;
+            }
+
+            if (!_resourceService.CheckResourceRights(resourceModel.resourceName, userId, "owner"))
+            {
+                reqResponse.SetResponse(401, "Not Authorized", "You are not allowed to change the rights of this resource.", null);
+                goto Finish;
+            }
+
+            _resourceService.SetRights(resourceModel.resourceName, resourceModel.rights);
 
         Finish:
             return reqResponse;

@@ -53,26 +53,43 @@ namespace POSD_Tema1.Services
             return false;
         }
 
-        public void CreateResource(string resourceName, string fullResourcePath, int userId, int resourceTypeId, string value)
+        public void CreateResource(string resourceName, string fullResourcePath, string parentPath, int userId, int resourceTypeId, string value)
         {
+            var parent = _dbEntities.Resources.Where(f => f.FullPath == parentPath).FirstOrDefault();
+
             _dbEntities.Resources.Add(new Resource
             {
                 Name = resourceName,
                 FullPath = fullResourcePath,
                 OwnerId = userId,
                 Content = value,
-                ResourceTypeId = resourceTypeId
+                ResourceTypeId = resourceTypeId,
+                Read = parent.Read,
+                Write = parent.Write
             });
 
             _dbEntities.SaveChanges();
         }
 
-        public bool CheckResourceRights(string resourceName, int userId)
+        public bool CheckResourceRights(string resourceName, int userId, string type)
         {
             var resource = _dbEntities.Resources.Where(f => f.FullPath == resourceName).FirstOrDefault();
 
-            if (resource.OwnerId == userId || resource.Read == true)
-                return true;
+            switch (type)
+            {
+                case "r":
+                    if (resource.OwnerId == userId || resource.Read == true)
+                        return true;
+                    break;
+                case "w":
+                    if (resource.OwnerId == userId || resource.Write == true)
+                        return true;
+                    break;
+                default:
+                    if (resource.OwnerId == userId)
+                        return true;
+                    break;
+            }
 
             return false;
         }
@@ -96,7 +113,7 @@ namespace POSD_Tema1.Services
 
                 foreach (Resource element in contentOfDirectory)
                 {
-                    if(element.FullPath.Split('/').Count() == pathLevel + 1)
+                    if (element.FullPath.Split('/').Count() == pathLevel + 1)
                         content.Add(new
                         {
                             element.FullPath,
@@ -122,9 +139,47 @@ namespace POSD_Tema1.Services
             return false;
         }
 
-        public void WriteInFile(string resourceName, string value) {
+        public void WriteInFile(string resourceName, string value)
+        {
             var resource = _dbEntities.Resources.Where(f => f.FullPath == resourceName).FirstOrDefault();
             resource.Content = resource.Content + value;
+            _dbEntities.SaveChanges();
+        }
+
+        public void SetRights(string resourceName, string rights)
+        {
+            IEnumerable<Resource> contentOfDirectory = _dbEntities.Resources.Where(f => f.FullPath.StartsWith(resourceName)).ToList();
+            var read = false;
+            var write = false;
+
+            switch (rights)
+            {
+                case "r":
+                    read = true;
+                    break;
+                case "w":
+                    write = true;
+                    break;
+                case "rw":
+                case "wr":
+                    read = true;
+                    write = true;
+                    break;
+            }
+
+            foreach (Resource resource in contentOfDirectory)
+            {
+                if (resource.Write == null || resource.FullPath == resourceName)
+                {
+                    resource.Write = write;
+                }
+
+                if (resource.Read == null || resource.FullPath == resourceName)
+                {
+                    resource.Read = read;
+                }
+            }
+
             _dbEntities.SaveChanges();
         }
     }
