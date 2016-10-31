@@ -23,6 +23,10 @@
         }
 
         function sendRequest(link, form) {
+            delete $scope.response.message;
+            delete $scope.response.fullMessage;
+            delete $scope.response.data;
+
             $http({
                 method: 'POST',
                 url: '/api/' + link,
@@ -31,11 +35,32 @@
             }).then(
                 function (res) {
                     console.log('succes !', res.data);
+                    setTimeout(function () {
+                        $scope.response = res.data;
+                        $scope.$apply();
+                    }, 500);
                 },
                 function (err) {
                     console.log('error');
                 }
             );
         }
+
+        function getAllResources() {
+            $http({
+                method: 'GET',
+                url: '/api/get-all-resources',
+                headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' }
+            }).then(
+                function (res) {
+                    console.log('succes !', res.data);
+                    $scope.response = res.data;
+                },
+                function (err) {
+                    console.log('error');
+                }
+            );
+        }
+        getAllResources();
     }
 }());

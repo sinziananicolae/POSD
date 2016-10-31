@@ -58,6 +58,7 @@ namespace POSD_Tema1.ControllersAPI
             }
 
             _resourceService.CreateResource(resourceInfo.resourceName, resourceInfo.fullResourcePath, resourceInfo.resourcePath, userId, resourceModel.resourceTypeId, resourceModel.value);
+            reqResponse = new Response();
 
         Finish:
             return reqResponse;
@@ -127,6 +128,7 @@ namespace POSD_Tema1.ControllersAPI
             }
 
             _resourceService.WriteInFile(resourceModel.resourceName, resourceModel.value);
+            reqResponse = new Response();
 
         Finish:
             return reqResponse;
@@ -158,8 +160,16 @@ namespace POSD_Tema1.ControllersAPI
             }
 
             _resourceService.SetRights(resourceModel.resourceName, resourceModel.rights);
+            reqResponse = new Response();
 
         Finish:
+            return reqResponse;
+        }
+
+        [HttpGet]
+        [Route("api/get-all-resources")]
+        public Response GetAllResources() {
+            Response reqResponse = new Response();
             return reqResponse;
         }
 

@@ -60,6 +60,7 @@
                     <label class="control-label col-sm-3" for="rights">Rights:</label>
                     <div class="col-sm-6">
                         <select class="form-control" name="rights" ng-model="form.rights" required>
+                            <option value="none">No Rights</option>
                             <option value="r">Read</option>
                             <option value="w">Write</option>
                             <option value="rw">Read & Write</option>
@@ -67,10 +68,45 @@
                     </div>
                 </div>
 
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-8" style="padding-left:100px">
                     <button class="btn btn-primary" ng-disabled="fileSystemForm.$invalid" ng-click="submitForm(methodType, form)">Submit</button>
+                    <hr /><hr />
                 </div>
             </form>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div>Server Response</div>
+                <div>{{response.message}}</div>
+                <div>{{response.fullMessage}}</div>
+                <div>{{response.data}}</div>
+                <hr /><hr />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div>Resources status in DB:</div>
+                <table class="table">
+                    <tr>
+                        <th>Resource</th>
+                        <th>Owner</th>
+                        <th>Read</th>
+                        <th>Write</th>
+                    </tr>
+                    <tr ng-repeat="resource in response.allData">
+                        <td>
+                            <span ng-style="{'padding-left' : resource.Level * 10}">
+                                <i ng-class="{1:'fa fa-folder ', 2:'fa fa-file'}[resource.ResourceTypeId]"></i> {{resource.FullPath}}
+                            </span>
+                        </td>
+                        <td>{{resource.Owner}}</td>
+                        <td>{{resource.Read}}</td>
+                        <td>{{resource.Write}}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>

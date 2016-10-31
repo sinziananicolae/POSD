@@ -94,38 +94,27 @@ namespace POSD_Tema1.Services
             return false;
         }
 
-        public object GetResourceContent(string resourceName)
+        public string GetResourceContent(string resourceName)
         {
             var resource = _dbEntities.Resources.Where(f => f.FullPath == resourceName).FirstOrDefault();
 
             if (resource.ResourceTypeId == 2)
             {
-                return new
-                {
-                    data = resource.Content
-                };
+                return resource.Content;
             }
             else
             {
                 int pathLevel = resourceName.Split('/').Count();
                 IEnumerable<Resource> contentOfDirectory = _dbEntities.Resources.Where(f => f.FullPath.StartsWith(resourceName)).ToList();
-                List<object> content = new List<object>();
+                var content = "";
 
                 foreach (Resource element in contentOfDirectory)
                 {
                     if (element.FullPath.Split('/').Count() == pathLevel + 1)
-                        content.Add(new
-                        {
-                            element.FullPath,
-                            ResourceType = element.ResourceType.Name,
-                            element.ResourceTypeId
-                        });
+                        content += element.FullPath.Split('/')[pathLevel] + "; ";
                 }
 
-                return new
-                {
-                    data = content
-                };
+                return content;
             }
         }
 
@@ -181,6 +170,24 @@ namespace POSD_Tema1.Services
             }
 
             _dbEntities.SaveChanges();
+        }
+
+        public List<object> GetAllResources() {
+            IEnumerable<Resource> allResources = _dbEntities.Resources.OrderBy(f => f.FullPath).ToList();
+            List<object> allRes = new List<object>();
+
+            foreach (Resource resource in allResources) {
+                allRes.Add(new {
+                    resource.FullPath,
+                    resource.ResourceTypeId,
+                    Level = resource.FullPath.Split('/').Count() - 1,
+                    Owner = resource.User.Username,
+                    Read = resource.Read == true ? "yes" : "no",
+                    Write = resource.Write == true ? "yes" : "no"
+                });
+            }
+
+            return allRes;
         }
     }
 }
