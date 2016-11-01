@@ -11,9 +11,9 @@
         <EntityTypeShape EntityType="Model.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="3.75" />
         <EntityTypeShape EntityType="Model.AspNetUser" Width="1.5" PointX="3" PointY="1.375" />
         <EntityTypeShape EntityType="Model.Resource" Width="1.5" PointX="3" PointY="7" />
-        <EntityTypeShape EntityType="Model.ResourceType" Width="1.5" PointX="0.75" PointY="7.625" />
+        <EntityTypeShape EntityType="Model.ResourceType" Width="1.5" PointX="0.75" PointY="7.75" />
         <EntityTypeShape EntityType="Model.sysdiagram" Width="1.5" PointX="7.75" PointY="0.75" />
-        <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="0.75" PointY="10.5" />
+        <EntityTypeShape EntityType="Model.User" Width="1.5" PointX="0.75" PointY="10.625" />
         <AssociationConnector Association="Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="Model.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="Model.FK__Resource__Parent__33D4B598" />

@@ -45,13 +45,13 @@ namespace POSD_Tema1.ControllersAPI
                 goto Finish;
             }
 
-            if (!_resourceService.CheckResourceOwner(resourceInfo.resourcePath, userId))
+            if (!_resourceService.IsUserOwner(resourceInfo.resourcePath, userId))
             {
-                reqResponse.SetResponse(401, "Not Authorized", "You do not have the rights to access this resource. Please contact the owner of the selected folder.", null);
+                reqResponse.SetResponse(401, "Not Authorized", "You do not have the rights to access this resource. Please contact the owner of the selected resource.", null);
                 goto Finish;
             }
 
-            if (!_resourceService.IsResourceUnique(resourceInfo.fullResourcePath))
+            if (_resourceService.ResourceExists(resourceInfo.fullResourcePath))
             {
                 reqResponse.SetResponse(500, "Already Existing", resourceInfo.fullResourcePath + " already exists in the current filesystem.", null);
                 goto Finish;
@@ -77,15 +77,15 @@ namespace POSD_Tema1.ControllersAPI
                 goto Finish;
             }
 
-            if (_resourceService.IsResourceUnique(resourceModel.resourceName))
+            if (!_resourceService.ResourceExists(resourceModel.resourceName))
             {
                 reqResponse.SetResponse(404, "Not Existing", resourceModel.resourceName + " does not exist in the current filesystem.", null);
                 goto Finish;
             }
 
-            if (!_resourceService.CheckResourceRights(resourceModel.resourceName, userId, "r"))
+            if (!_resourceService.IsResourceAccessible(resourceModel.resourceName, userId, "r"))
             {
-                reqResponse.SetResponse(401, "Not Authorized", "You do not have the rights to access this resource. Please contact the owner of the selected folder.", null);
+                reqResponse.SetResponse(401, "Not Authorized", "You do not have the rights to access this resource. Please contact the owner of the selected resource.", null);
                 goto Finish;
             }
 
@@ -109,19 +109,19 @@ namespace POSD_Tema1.ControllersAPI
                 goto Finish;
             }
 
-            if (_resourceService.IsResourceUnique(resourceModel.resourceName))
+            if (!_resourceService.ResourceExists(resourceModel.resourceName))
             {
                 reqResponse.SetResponse(404, "Not Existing", resourceModel.resourceName + " does not exist in the current filesystem.", null);
                 goto Finish;
             }
 
-            if (!_resourceService.CheckResourceRights(resourceModel.resourceName, userId, "w"))
+            if (!_resourceService.IsResourceAccessible(resourceModel.resourceName, userId, "w"))
             {
-                reqResponse.SetResponse(401, "Not Authorized", "You do not have the rights to access this resource. Please contact the owner of the selected folder.", null);
+                reqResponse.SetResponse(401, "Not Authorized", "You do not have the rights to access this resource. Please contact the owner of the selected resource.", null);
                 goto Finish;
             }
 
-            if (!_resourceService.IsFile(resourceModel.resourceName))
+            if (_resourceService.IsDirectory(resourceModel.resourceName))
             {
                 reqResponse.SetResponse(401, "Not Authorized", "You cannot write inside a directory.", null);
                 goto Finish;
@@ -147,13 +147,13 @@ namespace POSD_Tema1.ControllersAPI
                 goto Finish;
             }
 
-            if (_resourceService.IsResourceUnique(resourceModel.resourceName))
+            if (!_resourceService.ResourceExists(resourceModel.resourceName))
             {
                 reqResponse.SetResponse(404, "Not Existing", resourceModel.resourceName + " does not exist in the current filesystem.", null);
                 goto Finish;
             }
 
-            if (!_resourceService.CheckResourceRights(resourceModel.resourceName, userId, "owner"))
+            if (!_resourceService.IsUserOwner(resourceModel.resourceName, userId))
             {
                 reqResponse.SetResponse(401, "Not Authorized", "You are not allowed to change the rights of this resource.", null);
                 goto Finish;

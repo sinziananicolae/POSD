@@ -78,6 +78,7 @@
           <Property Name="FullPath" Type="varchar" MaxLength="255" Nullable="false" />
           <Property Name="Read" Type="bit" />
           <Property Name="Write" Type="bit" />
+          <Property Name="ParentId" Type="int" />
         </EntityType>
         <EntityType Name="ResourceType">
           <Key>
@@ -400,6 +401,7 @@
           <Property Name="FullPath" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Read" Type="Boolean" />
           <Property Name="Write" Type="Boolean" />
+          <Property Name="ParentId" Type="Int32" />
           <NavigationProperty Name="User" Relationship="Model.FK__Resource__Parent__33D4B598" FromRole="Resource" ToRole="User" />
           <NavigationProperty Name="ResourceType" Relationship="Model.FK__Resource__Resour__31EC6D26" FromRole="Resource" ToRole="ResourceType" />
         </EntityType>
@@ -576,6 +578,7 @@
           <EntitySetMapping Name="Resources">
             <EntityTypeMapping TypeName="Model.Resource">
               <MappingFragment StoreEntitySet="Resource">
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
                 <ScalarProperty Name="Write" ColumnName="Write" />
                 <ScalarProperty Name="Read" ColumnName="Read" />
                 <ScalarProperty Name="FullPath" ColumnName="FullPath" />

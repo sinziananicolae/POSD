@@ -22,8 +22,9 @@
 
                 <div class="form-group col-md-8">
                     <label class="control-label col-sm-3" for="resourceName">Resource Name:</label>
-                    <div class="col-sm-6">
-                        <input type="text" class="form-control" name="resourceName" placeholder="Resource Full Path" ng-model="form.resourceName" required />
+                    <div class="col-sm-6"  ng-class="{'has-error': !form.resourceName && !fileSystemForm.resourceName.$pristine }">
+                        <input type="text" class="form-control" name="resourceName" placeholder="Resource Full Path" ng-model="form.resourceName"
+                               ng-pattern="/^\/.+$/i" required />
                     </div>
                 </div>
 

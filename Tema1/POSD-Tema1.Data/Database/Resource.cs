@@ -22,6 +22,7 @@ namespace POSD_Tema1.Data.Database
         public string FullPath { get; set; }
         public Nullable<bool> Read { get; set; }
         public Nullable<bool> Write { get; set; }
+        public Nullable<int> ParentId { get; set; }
     
         public virtual User User { get; set; }
         public virtual ResourceType ResourceType { get; set; }
