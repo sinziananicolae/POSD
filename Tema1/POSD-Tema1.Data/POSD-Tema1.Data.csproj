@@ -51,6 +51,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\ACLforResource.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Database\AspNetRole.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
@@ -87,6 +90,9 @@
     <Compile Include="Database\ResourceType.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Database\Role.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Database\sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
@@ -97,6 +103,9 @@
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Database\User.cs">
+      <DependentUpon>DbEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\UserInRole.cs">
       <DependentUpon>DbEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

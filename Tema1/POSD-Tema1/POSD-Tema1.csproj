@@ -206,6 +206,8 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="ControllersAPI\ResourceController.cs" />
+    <Compile Include="ControllersAPI\RoleController.cs" />
+    <Compile Include="ControllersAPI\UserController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -218,6 +220,8 @@
     <Compile Include="Models\ResourceModel.cs" />
     <Compile Include="Models\ResourcePathModel.cs" />
     <Compile Include="Models\Response.cs" />
+    <Compile Include="Models\RoleModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

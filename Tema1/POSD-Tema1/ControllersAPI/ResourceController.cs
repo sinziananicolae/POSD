@@ -1,5 +1,6 @@
 ﻿using POSD_Tema1.Models;
 using POSD_Tema1.Services;
+using POSD_Tema1.Services.RoleService;
 using POSD_Tema1.Services.UserService;
 using System;
 using System.Collections.Generic;
@@ -172,6 +173,7 @@ namespace POSD_Tema1.ControllersAPI
             Response reqResponse = new Response();
             return reqResponse;
         }
+
 
     }
 }

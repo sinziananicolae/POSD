@@ -15,6 +15,14 @@
           <Property Name="Model" Type="varbinary(max)" Nullable="false" />
           <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
         </EntityType>
+        <EntityType Name="ACLforResource">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ResourceId" Type="int" Nullable="false" />
+          <Property Name="RoleId" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
@@ -76,8 +84,6 @@
           <Property Name="OwnerId" Type="int" />
           <Property Name="Content" Type="varchar" MaxLength="255" />
           <Property Name="FullPath" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="Read" Type="bit" />
-          <Property Name="Write" Type="bit" />
           <Property Name="ParentId" Type="int" />
         </EntityType>
         <EntityType Name="ResourceType">
@@ -86,6 +92,15 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Read" Type="bit" />
+          <Property Name="Write" Type="bit" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -105,6 +120,42 @@
           <Property Name="Username" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
+        <EntityType Name="UserInRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="RoleId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__ACLforRes__Resou__5EBF139D">
+          <End Role="Resource" Type="Self.Resource" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ACLforResource" Type="Self.ACLforResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Resource">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ACLforResource">
+              <PropertyRef Name="ResourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ACLforRes__RoleI__5FB337D6">
+          <End Role="Role" Type="Self.Role" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ACLforResource" Type="Self.ACLforResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ACLforResource">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__Resource__Parent__33D4B598">
           <End Role="User" Type="Self.User" Multiplicity="0..1" />
           <End Role="Resource" Type="Self.Resource" Multiplicity="*" />
@@ -128,6 +179,34 @@
             </Principal>
             <Dependent Role="Resource">
               <PropertyRef Name="ResourceTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserInRol__RoleI__6383C8BA">
+          <End Role="Role" Type="Self.Role" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="UserInRole" Type="Self.UserInRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserInRole">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserInRol__UserI__628FA481">
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="UserInRole" Type="Self.UserInRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserInRole">
+              <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -220,6 +299,7 @@
         <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="ModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ACLforResource" EntityType="Self.ACLforResource" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaims" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
@@ -227,8 +307,18 @@
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Resource" EntityType="Self.Resource" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResourceType" EntityType="Self.ResourceType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserInRole" EntityType="Self.UserInRole" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__ACLforRes__Resou__5EBF139D" Association="Self.FK__ACLforRes__Resou__5EBF139D">
+            <End Role="Resource" EntitySet="Resource" />
+            <End Role="ACLforResource" EntitySet="ACLforResource" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ACLforRes__RoleI__5FB337D6" Association="Self.FK__ACLforRes__RoleI__5FB337D6">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="ACLforResource" EntitySet="ACLforResource" />
+          </AssociationSet>
           <AssociationSet Name="FK__Resource__Parent__33D4B598" Association="Self.FK__Resource__Parent__33D4B598">
             <End Role="User" EntitySet="User" />
             <End Role="Resource" EntitySet="Resource" />
@@ -236,6 +326,14 @@
           <AssociationSet Name="FK__Resource__Resour__31EC6D26" Association="Self.FK__Resource__Resour__31EC6D26">
             <End Role="ResourceType" EntitySet="ResourceType" />
             <End Role="Resource" EntitySet="Resource" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserInRol__RoleI__6383C8BA" Association="Self.FK__UserInRol__RoleI__6383C8BA">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="UserInRole" EntitySet="UserInRole" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserInRol__UserI__628FA481" Association="Self.FK__UserInRol__UserI__628FA481">
+            <End Role="User" EntitySet="User" />
+            <End Role="UserInRole" EntitySet="UserInRole" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
@@ -290,14 +388,25 @@
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
           <EntitySet Name="C__MigrationHistory" EntityType="Model.C__MigrationHistory" />
+          <EntitySet Name="ACLforResources" EntityType="Model.ACLforResource" />
           <EntitySet Name="AspNetRoles" EntityType="Model.AspNetRole" />
           <EntitySet Name="AspNetUserClaims" EntityType="Model.AspNetUserClaim" />
           <EntitySet Name="AspNetUserLogins" EntityType="Model.AspNetUserLogin" />
           <EntitySet Name="AspNetUsers" EntityType="Model.AspNetUser" />
           <EntitySet Name="Resources" EntityType="Model.Resource" />
           <EntitySet Name="ResourceTypes" EntityType="Model.ResourceType" />
+          <EntitySet Name="Roles" EntityType="Model.Role" />
           <EntitySet Name="sysdiagrams" EntityType="Model.sysdiagram" />
           <EntitySet Name="Users" EntityType="Model.User" />
+          <EntitySet Name="UserInRoles" EntityType="Model.UserInRole" />
+          <AssociationSet Name="FK__ACLforRes__Resou__5EBF139D" Association="Model.FK__ACLforRes__Resou__5EBF139D">
+            <End Role="Resource" EntitySet="Resources" />
+            <End Role="ACLforResource" EntitySet="ACLforResources" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ACLforRes__RoleI__5FB337D6" Association="Model.FK__ACLforRes__RoleI__5FB337D6">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="ACLforResource" EntitySet="ACLforResources" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Model.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaim" EntitySet="AspNetUserClaims" />
@@ -313,6 +422,14 @@
           <AssociationSet Name="FK__Resource__Resour__31EC6D26" Association="Model.FK__Resource__Resour__31EC6D26">
             <End Role="ResourceType" EntitySet="ResourceTypes" />
             <End Role="Resource" EntitySet="Resources" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserInRol__RoleI__6383C8BA" Association="Model.FK__UserInRol__RoleI__6383C8BA">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="UserInRole" EntitySet="UserInRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK__UserInRol__UserI__628FA481" Association="Model.FK__UserInRol__UserI__628FA481">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserInRole" EntitySet="UserInRoles" />
           </AssociationSet>
           <AssociationSet Name="AspNetUserRoles" Association="Model.AspNetUserRoles">
             <End Role="AspNetRole" EntitySet="AspNetRoles" />
@@ -339,6 +456,16 @@
           <Property Name="ContextKey" Type="String" Nullable="false" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Name="Model" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
           <Property Name="ProductVersion" Type="String" Nullable="false" MaxLength="32" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ACLforResource">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ResourceId" Type="Int32" Nullable="false" />
+          <Property Name="RoleId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Resource" Relationship="Model.FK__ACLforRes__Resou__5EBF139D" FromRole="ACLforResource" ToRole="Resource" />
+          <NavigationProperty Name="Role" Relationship="Model.FK__ACLforRes__RoleI__5FB337D6" FromRole="ACLforResource" ToRole="Role" />
         </EntityType>
         <EntityType Name="AspNetRole">
           <Key>
@@ -399,9 +526,8 @@
           <Property Name="OwnerId" Type="Int32" />
           <Property Name="Content" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="FullPath" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Read" Type="Boolean" />
-          <Property Name="Write" Type="Boolean" />
           <Property Name="ParentId" Type="Int32" />
+          <NavigationProperty Name="ACLforResources" Relationship="Model.FK__ACLforRes__Resou__5EBF139D" FromRole="Resource" ToRole="ACLforResource" />
           <NavigationProperty Name="User" Relationship="Model.FK__Resource__Parent__33D4B598" FromRole="Resource" ToRole="User" />
           <NavigationProperty Name="ResourceType" Relationship="Model.FK__Resource__Resour__31EC6D26" FromRole="Resource" ToRole="ResourceType" />
         </EntityType>
@@ -412,6 +538,17 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Resources" Relationship="Model.FK__Resource__Resour__31EC6D26" FromRole="ResourceType" ToRole="Resource" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Read" Type="Boolean" />
+          <Property Name="Write" Type="Boolean" />
+          <NavigationProperty Name="ACLforResources" Relationship="Model.FK__ACLforRes__RoleI__5FB337D6" FromRole="Role" ToRole="ACLforResource" />
+          <NavigationProperty Name="UserInRoles" Relationship="Model.FK__UserInRol__RoleI__6383C8BA" FromRole="Role" ToRole="UserInRole" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -431,7 +568,46 @@
           <Property Name="Username" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Resources" Relationship="Model.FK__Resource__Parent__33D4B598" FromRole="User" ToRole="Resource" />
+          <NavigationProperty Name="UserInRoles" Relationship="Model.FK__UserInRol__UserI__628FA481" FromRole="User" ToRole="UserInRole" />
         </EntityType>
+        <EntityType Name="UserInRole">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="RoleId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Role" Relationship="Model.FK__UserInRol__RoleI__6383C8BA" FromRole="UserInRole" ToRole="Role" />
+          <NavigationProperty Name="User" Relationship="Model.FK__UserInRol__UserI__628FA481" FromRole="UserInRole" ToRole="User" />
+        </EntityType>
+        <Association Name="FK__ACLforRes__Resou__5EBF139D">
+          <End Type="Model.Resource" Role="Resource" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.ACLforResource" Role="ACLforResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Resource">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ACLforResource">
+              <PropertyRef Name="ResourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ACLforRes__RoleI__5FB337D6">
+          <End Type="Model.Role" Role="Role" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.ACLforResource" Role="ACLforResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ACLforResource">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -486,6 +662,34 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__UserInRol__RoleI__6383C8BA">
+          <End Type="Model.Role" Role="Role" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.UserInRole" Role="UserInRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserInRole">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__UserInRol__UserI__628FA481">
+          <End Type="Model.User" Role="User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.UserInRole" Role="UserInRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="UserInRole">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="AspNetUserRoles">
           <End Type="Model.AspNetRole" Role="AspNetRole" Multiplicity="*" />
           <End Type="Model.AspNetUser" Role="AspNetUser" Multiplicity="*" />
@@ -527,6 +731,15 @@
                 <ScalarProperty Name="Model" ColumnName="Model" />
                 <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
                 <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ACLforResources">
+            <EntityTypeMapping TypeName="Model.ACLforResource">
+              <MappingFragment StoreEntitySet="ACLforResource">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="ResourceId" ColumnName="ResourceId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -579,8 +792,6 @@
             <EntityTypeMapping TypeName="Model.Resource">
               <MappingFragment StoreEntitySet="Resource">
                 <ScalarProperty Name="ParentId" ColumnName="ParentId" />
-                <ScalarProperty Name="Write" ColumnName="Write" />
-                <ScalarProperty Name="Read" ColumnName="Read" />
                 <ScalarProperty Name="FullPath" ColumnName="FullPath" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
@@ -593,6 +804,16 @@
           <EntitySetMapping Name="ResourceTypes">
             <EntityTypeMapping TypeName="Model.ResourceType">
               <MappingFragment StoreEntitySet="ResourceType">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="Model.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="Write" ColumnName="Write" />
+                <ScalarProperty Name="Read" ColumnName="Read" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -614,6 +835,15 @@
               <MappingFragment StoreEntitySet="User">
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserInRoles">
+            <EntityTypeMapping TypeName="Model.UserInRole">
+              <MappingFragment StoreEntitySet="UserInRole">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

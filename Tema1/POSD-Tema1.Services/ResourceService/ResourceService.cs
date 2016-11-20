@@ -95,17 +95,7 @@ namespace POSD_Tema1.Services
         public bool IsResourceReadable (Resource resource) {
             var read = false;
 
-            if (resource.Read != null) {
-                return (bool)resource.Read;
-            }
-
-            while (resource.ParentId != null && read == false) {
-                resource = _dbEntities.Resources.FirstOrDefault(f => f.Id == resource.ParentId);
-                if (resource.Read == true)
-                {
-                    read = true;
-                }
-            }
+            
 
             return read;
         }
@@ -114,19 +104,7 @@ namespace POSD_Tema1.Services
         {
             var write = false;
 
-            if (resource.Write != null)
-            {
-                return (bool)resource.Write;
-            }
-
-            while (resource.ParentId != null && write == false)
-            {
-                resource = _dbEntities.Resources.FirstOrDefault(f => f.Id == resource.ParentId);
-                if (resource.Write == true)
-                {
-                    write = true;
-                }
-            }
+            
 
             return write;
         }
@@ -174,8 +152,6 @@ namespace POSD_Tema1.Services
 
         public void SetRights(string resourceName, string rights)
         {
-            var resource = _dbEntities.Resources.FirstOrDefault(f => f.FullPath == resourceName);
-
             var read = false;
             var write = false;
 
@@ -193,11 +169,6 @@ namespace POSD_Tema1.Services
                     write = true;
                     break;
             }
-            
-            resource.Write = write;
-            resource.Read = read;
-
-            _dbEntities.SaveChanges();
         }
 
         public List<object> GetAllResources() {
@@ -209,9 +180,9 @@ namespace POSD_Tema1.Services
                     resource.FullPath,
                     resource.ResourceTypeId,
                     Level = resource.FullPath.Split('/').Count() - 1,
-                    Owner = resource.User.Username,
-                    Read = resource.Read == true ? "yes" : resource.Read == false ? "no" : "",
-                    Write = resource.Write == true ? "yes" : resource.Write == false ? "no" : ""
+                    Owner = resource.User.Username
+                    //Read = resource.Read == true ? "yes" : resource.Read == false ? "no" : "",
+                    //Write = resource.Write == true ? "yes" : resource.Write == false ? "no" : ""
                 });
             }
 
