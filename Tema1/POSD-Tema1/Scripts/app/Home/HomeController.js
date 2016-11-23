@@ -5,6 +5,8 @@
     .controller("HomeController", ["$scope", "$http", homeController]);
 
     function homeController($scope, $http, constantsService) {
+        $scope.rootForm = {};
+
         $scope.submitForm = function (methodType, form) {
             switch(methodType){
                 case "1":
@@ -18,6 +20,15 @@
                     break;
                 case "4":
                     sendRequest("add-rights", form);
+                    break;
+                case "5":
+                    sendRequest("create-role", form);
+                    break;
+                case "6":
+                    sendRequest("assign-role", form);
+                    break;
+                case "7":
+                    sendRequest("change-rights", form);
                     break;
             }
         }

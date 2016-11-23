@@ -59,31 +59,82 @@
                     </div>
 
                     <div class="form-group col-md-12" ng-if="methodType == 4">
-                        <label class="control-label col-sm-3" for="rights">Role:</label>
+                        <label class="control-label col-sm-3" for="role">Role:</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" name="value" placeholder="Value" ng-model="form.roleName" ng-required="methodType == 4" />
-                            @*<select class="form-control" name="rights" ng-model="form.rights" required>
-                                    <option value="none">No Rights</option>
-                                    <option value="r">Read</option>
-                                    <option value="w">Write</option>
-                                    <option value="rw">Read & Write</option>
-                                </select>*@
+                            <input type="text" class="form-control" name="role" placeholder="Value" ng-model="form.roleName" ng-required="methodType == 4" />
                         </div>
                     </div>
 
                     <div class="form-group col-md-12" style="padding-left:100px">
                         <button class="btn btn-primary" ng-disabled="fileSystemForm.$invalid" ng-click="submitForm(methodType, form)">Submit</button>
-                        <hr /><hr />
                     </div>
                 </form>
             </div>
-            <div class="row">
-                pam
-            </div>
-        </div>
+            <div class="col-md-6">
+                <form class="form-horizontal" name="rootForm" novalidate>
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-sm-3" for="usernameRoot">Username:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="usernameRoot" placeholder="Username" ng-model="rootForm.username" required />
+                        </div>
+                    </div>
 
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-sm-3" for="passwordRoot">Password:</label>
+                        <div class="col-sm-6">
+                            <input type="password" class="form-control" name="passwordRoot" placeholder="Password" ng-model="rootForm.password" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-sm-3" for="rolename">Role Name:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="rolename" placeholder="Role name" ng-model="rootForm.roleName" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-sm-3" for="methodTypeRoot">Method Type:</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" name="methodTypeRoot" ng-model="rootMethodType" required>
+                                <option value="5">Create Role</option>
+                                <option value="6">Assign Role</option>
+                                <option value="7">Change Rights</option>
+                                @*<option value="4">Create Resource</option>*@
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12" ng-if="rootMethodType == 6">
+                        <label class="control-label col-sm-3" for="usInRole">User in role:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="usInRole" placeholder="User in role" ng-model="rootForm.userInRole" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12" ng-if="rootMethodType == 7">
+                        <label class="control-label col-sm-3" for="rights">Rights:</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" name="rights" ng-model="rootForm.rights" required>
+                                <option value="none">No Rights</option>
+                                <option value="r">Read</option>
+                                <option value="w">Write</option>
+                                <option value="rw">Read & Write</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12" style="padding-left:100px">
+                        <button class="btn btn-primary" ng-disabled="rootForm.$invalid" ng-click="submitForm(rootMethodType, rootForm)">Submit</button>
+                        
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+        <hr /><hr />
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div>Server Response</div>
                 <div>{{response.message}}</div>
                 <div>{{response.fullMessage}}</div>

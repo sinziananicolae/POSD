@@ -188,7 +188,7 @@ namespace POSD_Tema1.Services
         public void WriteInFile(string resourceName, string value)
         {
             var resource = _dbEntities.Resources.Where(f => f.FullPath == resourceName).FirstOrDefault();
-            resource.Content = resource.Content + value;
+            resource.Content = value;
             _dbEntities.SaveChanges();
         }
 
