@@ -5,76 +5,81 @@
 <div ng-controller="HomeController">
     <div class="container" style="padding: 20px 0 20px 0">
         <div class="row">
-            <form class="form-horizontal" name="fileSystemForm" novalidate>
-                <div class="form-group col-md-8">
-                    <label class="control-label col-sm-3" for="name">Username:</label>
-                    <div class="col-sm-6">
-                        <input type="text" class="form-control" name="username" placeholder="Username" ng-model="form.username" required />
+            <div class="col-md-6">
+                <form class="form-horizontal" name="fileSystemForm" novalidate>
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-sm-3" for="name">Username:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="username" placeholder="Username" ng-model="form.username" required />
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group col-md-8">
-                    <label class="control-label col-sm-3" for="password">Password:</label>
-                    <div class="col-sm-6">
-                        <input type="password" class="form-control" name="password" placeholder="Password" ng-model="form.password" required />
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-sm-3" for="password">Password:</label>
+                        <div class="col-sm-6">
+                            <input type="password" class="form-control" name="password" placeholder="Password" ng-model="form.password" required />
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group col-md-8">
-                    <label class="control-label col-sm-3" for="resourceName">Resource Name:</label>
-                    <div class="col-sm-6"  ng-class="{'has-error': !form.resourceName && !fileSystemForm.resourceName.$pristine }">
-                        <input type="text" class="form-control" name="resourceName" placeholder="Resource Full Path" ng-model="form.resourceName"
-                               ng-pattern="/^\/.+$/i" required />
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-sm-3" for="resourceName">Resource Name:</label>
+                        <div class="col-sm-6" ng-class="{'has-error': !form.resourceName && !fileSystemForm.resourceName.$pristine }">
+                            <input type="text" class="form-control" name="resourceName" placeholder="Resource Full Path" ng-model="form.resourceName"
+                                   ng-pattern="/^\/.+$/i" required />
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group col-md-8">
-                    <label class="control-label col-sm-3" for="methodType">Method Type:</label>
-                    <div class="col-sm-6">
-                        <select class="form-control" name="methodType" ng-model="methodType" required>
-                            <option value="1">Create Resource</option>
-                            <option value="2">Read Resource</option>
-                            <option value="3">Write Resource</option>
-                            <option value="4">Add Rights</option>
-                        </select>
+                    <div class="form-group col-md-12">
+                        <label class="control-label col-sm-3" for="methodType">Method Type:</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" name="methodType" ng-model="methodType" required>
+                                <option value="1">Create Resource</option>
+                                <option value="2">Read Resource</option>
+                                <option value="3">Write Resource</option>
+                                <option value="4">Add Rights</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group col-md-8" ng-if="methodType == 1">
-                    <label class="control-label col-sm-3" for="resourceType">Resource Type:</label>
-                    <div class="col-sm-6">
-                        <select class="form-control" name="resourceType" ng-model="form.resourceTypeId" required>
-                            <option value="1">Folder</option>
-                            <option value="2">File</option>
-                        </select>
+                    <div class="form-group col-md-12" ng-if="methodType == 1">
+                        <label class="control-label col-sm-3" for="resourceType">Resource Type:</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" name="resourceType" ng-model="form.resourceTypeId" required>
+                                <option value="1">Folder</option>
+                                <option value="2">File</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group col-md-8" ng-if="(methodType == 1 && form.resourceTypeId == 2) || methodType == 3">
-                    <label class="control-label col-sm-3" for="value">Value:</label>
-                    <div class="col-sm-6">
-                        <input type="text" class="form-control" name="value" placeholder="Value" ng-model="form.value" ng-required="methodType == 3" />
+                    <div class="form-group col-md-12" ng-if="(methodType == 1 && form.resourceTypeId == 2) || methodType == 3">
+                        <label class="control-label col-sm-3" for="value">Value:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="value" placeholder="Value" ng-model="form.value" ng-required="methodType == 3" />
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group col-md-8" ng-if="methodType == 4">
-                    <label class="control-label col-sm-3" for="rights">Role:</label>
-                    <div class="col-sm-6">
-                        <input type="text" class="form-control" name="value" placeholder="Value" ng-model="form.roleName" ng-required="methodType == 4" />
-                        @*<select class="form-control" name="rights" ng-model="form.rights" required>
-                            <option value="none">No Rights</option>
-                            <option value="r">Read</option>
-                            <option value="w">Write</option>
-                            <option value="rw">Read & Write</option>
-                        </select>*@
+                    <div class="form-group col-md-12" ng-if="methodType == 4">
+                        <label class="control-label col-sm-3" for="rights">Role:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="value" placeholder="Value" ng-model="form.roleName" ng-required="methodType == 4" />
+                            @*<select class="form-control" name="rights" ng-model="form.rights" required>
+                                    <option value="none">No Rights</option>
+                                    <option value="r">Read</option>
+                                    <option value="w">Write</option>
+                                    <option value="rw">Read & Write</option>
+                                </select>*@
+                        </div>
                     </div>
-                </div>
 
-                <div class="form-group col-md-8" style="padding-left:100px">
-                    <button class="btn btn-primary" ng-disabled="fileSystemForm.$invalid" ng-click="submitForm(methodType, form)">Submit</button>
-                    <hr /><hr />
-                </div>
-            </form>
+                    <div class="form-group col-md-12" style="padding-left:100px">
+                        <button class="btn btn-primary" ng-disabled="fileSystemForm.$invalid" ng-click="submitForm(methodType, form)">Submit</button>
+                        <hr /><hr />
+                    </div>
+                </form>
+            </div>
+            <div class="row">
+                pam
+            </div>
         </div>
 
         <div class="row">
