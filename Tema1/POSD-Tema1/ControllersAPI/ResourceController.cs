@@ -15,11 +15,13 @@ namespace POSD_Tema1.ControllersAPI
     {
         private ResourceService _resourceService;
         private UserService _userService;
+        private RoleService _roleService;
 
         public ResourceController()
         {
             _resourceService = new ResourceService();
             _userService = new UserService();
+            _roleService = new RoleService();
         }
 
         public IEnumerable<object> Get()
@@ -134,6 +136,47 @@ namespace POSD_Tema1.ControllersAPI
         Finish:
             return reqResponse;
         }
+
+        [HttpPost]
+        [Route("api/add-rights")]
+        public Response AddRights([FromBody]ResourceModel resourceModel)
+        {
+            Response reqResponse = new Response();
+
+            int userId = _userService.GetUser(resourceModel.username, resourceModel.password);
+            if (userId == -1)
+            {
+                reqResponse.SetResponse(401, "Not Authorized", "Invalid credentials inserted!", null);
+                goto Finish;
+            }
+
+            ResourcePathModel resourceInfo = new ResourcePathModel(resourceModel.resourceName);
+
+            if (!_resourceService.IsUserOwner(resourceInfo.fullResourcePath, userId))
+            {
+                reqResponse.SetResponse(401, "Not Authorized", "You are not allowed to change the roles of the selected resource.", null);
+                goto Finish;
+            }
+
+            if (!_resourceService.ResourceExists(resourceModel.resourceName))
+            {
+                reqResponse.SetResponse(404, "Not Existing", resourceModel.resourceName + " does not exist in the current filesystem.", null);
+                goto Finish;
+            }
+
+            if (!_roleService.ExistsRole(resourceModel.roleName))
+            {
+                reqResponse.SetResponse(500, "Not Existing", "Role '" + resourceModel.roleName + "' does not exist in the system.", null);
+                goto Finish;
+            }
+
+            _resourceService.AddRights(resourceModel.roleName, resourceModel.resourceName);
+            reqResponse = new Response();
+
+        Finish:
+            return reqResponse;
+        }
+
 
         [HttpGet]
         [Route("api/get-all-resources")]

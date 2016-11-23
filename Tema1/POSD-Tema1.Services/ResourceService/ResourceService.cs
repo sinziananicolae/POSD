@@ -92,10 +92,30 @@ namespace POSD_Tema1.Services
             return false;
         }
 
-        public bool IsResourceReadable (Resource resource) {
+        public bool IsResourceReadable(Resource resource) {
             var read = false;
 
-            
+            foreach (ACLforResource acl in resource.ACLforResources) {
+                if (acl.Role.Read == true) {
+                    read = true;
+                    break;
+                }
+            }
+
+            if (read == true) return read;
+
+            while (resource.ParentId != null && read == false)
+            {
+                resource = _dbEntities.Resources.FirstOrDefault(f => f.Id == resource.ParentId);
+                foreach (ACLforResource acl in resource.ACLforResources)
+                {
+                    if (acl.Role.Read == true)
+                    {
+                        read = true;
+                        break;
+                    }
+                }
+            }
 
             return read;
         }
@@ -104,7 +124,29 @@ namespace POSD_Tema1.Services
         {
             var write = false;
 
-            
+            foreach (ACLforResource acl in resource.ACLforResources)
+            {
+                if (acl.Role.Write == true)
+                {
+                    write = true;
+                    break;
+                }
+            }
+
+            if (write == true) return write;
+
+            while (resource.ParentId != null && write == false)
+            {
+                resource = _dbEntities.Resources.FirstOrDefault(f => f.Id == resource.ParentId);
+                foreach (ACLforResource acl in resource.ACLforResources)
+                {
+                    if (acl.Role.Write == true)
+                    {
+                        write = true;
+                        break;
+                    }
+                }
+            }
 
             return write;
         }
@@ -147,6 +189,19 @@ namespace POSD_Tema1.Services
         {
             var resource = _dbEntities.Resources.Where(f => f.FullPath == resourceName).FirstOrDefault();
             resource.Content = resource.Content + value;
+            _dbEntities.SaveChanges();
+        }
+
+        public void AddRights(string roleName, string resourceName) {
+            var role = _dbEntities.Roles.FirstOrDefault(f => f.Name == roleName);
+            var resource = _dbEntities.Resources.FirstOrDefault(f => f.FullPath == resourceName);
+
+            _dbEntities.ACLforResources.Add(new ACLforResource
+            {
+                ResourceId = resource.Id,
+                RoleId = role.Id
+            });
+
             _dbEntities.SaveChanges();
         }
 

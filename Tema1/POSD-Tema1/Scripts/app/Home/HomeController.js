@@ -17,7 +17,7 @@
                     sendRequest("write-resource", form);
                     break;
                 case "4":
-                    sendRequest("change-rights", form);
+                    sendRequest("add-rights", form);
                     break;
             }
         }

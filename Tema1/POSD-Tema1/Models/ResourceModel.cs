@@ -14,5 +14,6 @@ namespace POSD_Tema1.Models
         public int resourceTypeId { get; set; }
         public string value { get; set; }
         public string rights { get; set; }
+        public string roleName { get; set; }
     }
 }
