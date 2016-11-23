@@ -37,6 +37,8 @@
                     console.log('succes !', res.data);
                     setTimeout(function () {
                         $scope.response = res.data;
+                        $scope.allResources = res.data.allData.allResources;
+                        $scope.allRoles = res.data.allData.allRoles;
                         $scope.$apply();
                     }, 500);
                 },
@@ -55,6 +57,8 @@
                 function (res) {
                     console.log('succes !', res.data);
                     $scope.response = res.data;
+                    $scope.allResources = res.data.allData.allResources;
+                    $scope.allRoles = res.data.allData.allRoles;
                 },
                 function (err) {
                     console.log('error');

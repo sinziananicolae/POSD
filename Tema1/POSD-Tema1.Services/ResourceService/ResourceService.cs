@@ -150,41 +150,40 @@ namespace POSD_Tema1.Services
             _dbEntities.SaveChanges();
         }
 
-        public void SetRights(string resourceName, string rights)
-        {
-            var read = false;
-            var write = false;
-
-            switch (rights)
-            {
-                case "r":
-                    read = true;
-                    break;
-                case "w":
-                    write = true;
-                    break;
-                case "rw":
-                case "wr":
-                    read = true;
-                    write = true;
-                    break;
-            }
-        }
-
-        public List<object> GetAllResources() {
+        public Dictionary<string, object> GetAllResources() {
             IEnumerable<Resource> allResources = _dbEntities.Resources.OrderBy(f => f.FullPath).ToList();
-            List<object> allRes = new List<object>();
+            Dictionary<string, object> allRes = new Dictionary<string, object>();
+            List<object> resources = new List<object>();
 
             foreach (Resource resource in allResources) {
-                allRes.Add(new {
+                resources.Add(new {
                     resource.FullPath,
                     resource.ResourceTypeId,
                     Level = resource.FullPath.Split('/').Count() - 1,
-                    Owner = resource.User.Username
-                    //Read = resource.Read == true ? "yes" : resource.Read == false ? "no" : "",
-                    //Write = resource.Write == true ? "yes" : resource.Write == false ? "no" : ""
+                    Owner = resource.User.Username,
+                    Roles = resource.ACLforResources.Select(f => new {
+                        f.Role.Name
+                    }).ToList()
                 });
             }
+
+            allRes.Add("allResources", resources);
+
+            IEnumerable<Role> allRoles = _dbEntities.Roles.ToList();
+            List<object> roles = new List<object>();
+
+            foreach (Role role in allRoles) {
+                roles.Add(new {
+                    role.Name,
+                    role.Read,
+                    role.Write,
+                    Users = role.UserInRoles.Select(f => new {
+                        f.User.Username
+                    }).ToList()
+                });
+            }
+
+            allRes.Add("allRoles", roles);
 
             return allRes;
         }

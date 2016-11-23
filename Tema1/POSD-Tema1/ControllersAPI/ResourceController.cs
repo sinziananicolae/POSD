@@ -135,38 +135,6 @@ namespace POSD_Tema1.ControllersAPI
             return reqResponse;
         }
 
-        [HttpPost]
-        [Route("api/change-rights")]
-        public Response ChangeRights([FromBody] ResourceModel resourceModel)
-        {
-            Response reqResponse = new Response();
-
-            int userId = _userService.GetUser(resourceModel.username, resourceModel.password);
-            if (userId == -1)
-            {
-                reqResponse.SetResponse(401, "Not Authorized", "Invalid credentials inserted!", null);
-                goto Finish;
-            }
-
-            if (!_resourceService.ResourceExists(resourceModel.resourceName))
-            {
-                reqResponse.SetResponse(404, "Not Existing", resourceModel.resourceName + " does not exist in the current filesystem.", null);
-                goto Finish;
-            }
-
-            if (!_resourceService.IsUserOwner(resourceModel.resourceName, userId))
-            {
-                reqResponse.SetResponse(401, "Not Authorized", "You are not allowed to change the rights of this resource.", null);
-                goto Finish;
-            }
-
-            _resourceService.SetRights(resourceModel.resourceName, resourceModel.rights);
-            reqResponse = new Response();
-
-        Finish:
-            return reqResponse;
-        }
-
         [HttpGet]
         [Route("api/get-all-resources")]
         public Response GetAllResources() {

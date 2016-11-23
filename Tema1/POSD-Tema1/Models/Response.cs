@@ -13,7 +13,7 @@ namespace POSD_Tema1.Models
         public string message { get; set; }
         public string fullMessage { get; set; }
         public object data { get; set; }
-        public List<object> allData { get; set; }
+        public Dictionary<string, object> allData { get; set; }
 
         private ResourceService _resourceService;
 

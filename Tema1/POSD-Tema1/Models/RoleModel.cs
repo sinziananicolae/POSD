@@ -11,7 +11,6 @@ namespace POSD_Tema1.Models
         public string password { get; set; }
         public string roleName { get; set; }
         public string userInRole { get; set; }
-        public bool read { get; set; }
-        public bool write { get; set; }
+        public string rights { get; set; }
     }
 }

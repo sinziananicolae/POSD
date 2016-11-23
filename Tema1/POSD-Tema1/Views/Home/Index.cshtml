@@ -35,7 +35,7 @@
                             <option value="1">Create Resource</option>
                             <option value="2">Read Resource</option>
                             <option value="3">Write Resource</option>
-                            <option value="4">Change Rights</option>
+                            <option value="4">Add Rights</option>
                         </select>
                     </div>
                 </div>
@@ -58,14 +58,15 @@
                 </div>
 
                 <div class="form-group col-md-8" ng-if="methodType == 4">
-                    <label class="control-label col-sm-3" for="rights">Rights:</label>
+                    <label class="control-label col-sm-3" for="rights">Role:</label>
                     <div class="col-sm-6">
-                        <select class="form-control" name="rights" ng-model="form.rights" required>
+                        <input type="text" class="form-control" name="value" placeholder="Value" ng-model="form.roleName" ng-required="methodType == 4" />
+                        @*<select class="form-control" name="rights" ng-model="form.rights" required>
                             <option value="none">No Rights</option>
                             <option value="r">Read</option>
                             <option value="w">Write</option>
                             <option value="rw">Read & Write</option>
-                        </select>
+                        </select>*@
                     </div>
                 </div>
 
@@ -87,24 +88,42 @@
         </div>
 
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-6">
                 <div>Resources status in DB:</div>
                 <table class="table">
                     <tr>
                         <th>Resource</th>
                         <th>Owner</th>
-                        <th>Read</th>
-                        <th>Write</th>
+                        <th>Roles</th>
                     </tr>
-                    <tr ng-repeat="resource in response.allData">
+                    <tr ng-repeat="resource in allResources">
                         <td>
                             <span ng-style="{'padding-left' : resource.Level * 10}">
                                 <i ng-class="{1:'fa fa-folder ', 2:'fa fa-file'}[resource.ResourceTypeId]"></i> {{resource.FullPath}}
                             </span>
                         </td>
                         <td>{{resource.Owner}}</td>
-                        <td>{{resource.Read}}</td>
-                        <td>{{resource.Write}}</td>
+                        <td><span ng-repeat="role in resource.Roles">{{role.Name}}, </span></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="col-md-6">
+                <div>Roles status in DB:</div>
+                <table class="table">
+                    <tr>
+                        <th>Role</th>
+                        <th>Read</th>
+                        <th>Write</th>
+                        <th>Users</th>
+                    </tr>
+                    <tr ng-repeat="role in allRoles">
+                        <td>
+                            {{role.Name}}
+                        </td>
+                        <td>{{role.Read}}</td>
+                        <td>{{role.Write}}</td>
+                        <td><span ng-repeat="user in role.Users">{{user.Username}}, </span></td>
                     </tr>
                 </table>
             </div>

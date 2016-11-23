@@ -35,5 +35,17 @@ namespace POSD_Tema1.Services.UserService
             _dbEntities.Users.Add(user);
             _dbEntities.SaveChanges();
         }
+
+        public bool ExistsUser(string username)
+        {
+            var user = _dbEntities.Users.FirstOrDefault(f => f.Username == username);
+
+            if (user != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

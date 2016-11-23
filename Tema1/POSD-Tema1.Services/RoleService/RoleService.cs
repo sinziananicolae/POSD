@@ -35,5 +35,51 @@ namespace POSD_Tema1.Services.RoleService
             return true;
         }
 
+        public void ChangeRights(string roleName, string rights) {
+            var read = false;
+            var write = false;
+
+            switch (rights)
+            {
+                case "r":
+                    read = true;
+                    break;
+                case "w":
+                    write = true;
+                    break;
+                case "rw":
+                case "wr":
+                    read = true;
+                    write = true;
+                    break;
+            }
+
+            var role = _dbEntities.Roles.FirstOrDefault(f => f.Name == roleName);
+            role.Read = read;
+            role.Write = write;
+            _dbEntities.SaveChanges();
+        }
+
+        public void AssignRole(string roleName, string userName) {
+            var role = _dbEntities.Roles.FirstOrDefault(f => f.Name == roleName);
+            var user = _dbEntities.Users.FirstOrDefault(f => f.Username == userName);
+
+            _dbEntities.UserInRoles.Add(new UserInRole {
+                UserId = user.Id,
+                RoleId = role.Id
+            });
+
+            _dbEntities.SaveChanges();
+        }
+
+        public bool ExistsUserInRole(string roleName, string userName) {
+            var userInRole = _dbEntities.UserInRoles.FirstOrDefault(f => f.Role.Name == roleName && f.User.Username == userName);
+
+            if (userInRole == null)
+                return false;
+
+            return true;
+        }
+
     }
 }

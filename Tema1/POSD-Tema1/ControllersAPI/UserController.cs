@@ -24,16 +24,16 @@ namespace POSD_Tema1.ControllersAPI
         {
             Response reqResponse = new Response();
 
+            if (userModel.username != "root")
+            {
+                reqResponse.SetResponse(401, "Not Authorized", "You are not authorized to create a user!", null);
+                goto Finish;
+            }
+
             int userId = _userService.GetUser(userModel.username, userModel.password);
             if (userId == -1)
             {
                 reqResponse.SetResponse(401, "Not Authorized", "Invalid credentials inserted!", null);
-                goto Finish;
-            }
-
-            if (userModel.username != "root")
-            {
-                reqResponse.SetResponse(401, "Not Authorized", "You are not authorized to create a user!", null);
                 goto Finish;
             }
 
