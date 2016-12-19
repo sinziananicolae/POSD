@@ -19,7 +19,7 @@
                     sendRequest("write-resource", form);
                     break;
                 case "4":
-                    sendRequest("add-rights", form);
+                    sendRequest("assign-permission", form);
                     break;
                 case "5":
                     sendRequest("create-role", form);
@@ -28,7 +28,13 @@
                     sendRequest("assign-role", form);
                     break;
                 case "7":
-                    sendRequest("change-rights", form);
+                    sendRequest("create-permission", form);
+                case "8":
+                    sendRequest("add-permission-to-role", form);
+                case "9":
+                    sendRequest("change-permission-rights", form);
+                case "10":
+                    sendRequest("revoke-role", form);
                     break;
             }
         }

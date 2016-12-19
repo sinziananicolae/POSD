@@ -36,7 +36,7 @@
                                 <option value="1">Create Resource</option>
                                 <option value="2">Read Resource</option>
                                 <option value="3">Write Resource</option>
-                                <option value="4">Add Rights</option>
+                                <option value="4">Assign Permission</option>
                             </select>
                         </div>
                     </div>
@@ -59,9 +59,9 @@
                     </div>
 
                     <div class="form-group col-md-12" ng-if="methodType == 4">
-                        <label class="control-label col-sm-3" for="role">Role:</label>
+                        <label class="control-label col-sm-3" for="role">Permission:</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" name="role" placeholder="Value" ng-model="form.roleName" ng-required="methodType == 4" />
+                            <input type="text" class="form-control" name="permission" placeholder="Permission name" ng-model="form.permissionName" ng-required="methodType == 4" />
                         </div>
                     </div>
 
@@ -87,32 +87,41 @@
                     </div>
 
                     <div class="form-group col-md-12">
+                        <label class="control-label col-sm-3" for="methodTypeRoot">Method Type:</label>
+                        <div class="col-sm-6">
+                            <select class="form-control" name="methodTypeRoot" ng-model="rootMethodType" required>
+                                <option value="5">Create Role</option>
+                                <option value="6">Assign Role</option>
+                                <option value="7">Create Permission</option>
+                                <option value="8">Add Permission To Role</option>
+                                <option value="9">Change Permission Rights</option>
+                                <option value="10">Revoke Role</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12" ng-if="rootMethodType == 5 || rootMethodType == 6 || rootMethodType == 8 || rootMethodType == 10">
                         <label class="control-label col-sm-3" for="rolename">Role Name:</label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" name="rolename" placeholder="Role name" ng-model="rootForm.roleName" required />
                         </div>
                     </div>
 
-                    <div class="form-group col-md-12">
-                        <label class="control-label col-sm-3" for="methodTypeRoot">Method Type:</label>
-                        <div class="col-sm-6">
-                            <select class="form-control" name="methodTypeRoot" ng-model="rootMethodType" required>
-                                <option value="5">Create Role</option>
-                                <option value="6">Assign Role</option>
-                                <option value="7">Change Rights</option>
-                                @*<option value="4">Create Resource</option>*@
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group col-md-12" ng-if="rootMethodType == 6">
+                    <div class="form-group col-md-12" ng-if="rootMethodType == 6 || rootMethodType == 10">
                         <label class="control-label col-sm-3" for="usInRole">User in role:</label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" name="usInRole" placeholder="User in role" ng-model="rootForm.userInRole" required />
                         </div>
                     </div>
 
-                    <div class="form-group col-md-12" ng-if="rootMethodType == 7">
+                    <div class="form-group col-md-12" ng-if="rootMethodType == 7 || rootMethodType == 8 || rootMethodType == 9">
+                        <label class="control-label col-sm-3" for="permission">Permission:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="permission" placeholder="Permission name" ng-model="rootForm.permissionName" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12" ng-if="rootMethodType == 7 || rootMethodType == 9">
                         <label class="control-label col-sm-3" for="rights">Rights:</label>
                         <div class="col-sm-6">
                             <select class="form-control" name="rights" ng-model="rootForm.rights" required>
@@ -150,7 +159,7 @@
                     <tr>
                         <th>Resource</th>
                         <th>Owner</th>
-                        <th>Roles</th>
+                        <th>Permissions</th>
                     </tr>
                     <tr ng-repeat="resource in allResources">
                         <td>
@@ -159,7 +168,7 @@
                             </span>
                         </td>
                         <td>{{resource.Owner}}</td>
-                        <td><span ng-repeat="role in resource.Roles">{{role.Name}}, </span></td>
+                        <td><span ng-repeat="permission in resource.Permissions">{{permission.Name}}, </span></td>
                     </tr>
                 </table>
             </div>
@@ -169,17 +178,53 @@
                 <table class="table">
                     <tr>
                         <th>Role</th>
-                        <th>Read</th>
-                        <th>Write</th>
                         <th>Users</th>
+                        <th>Permissions</th>
                     </tr>
                     <tr ng-repeat="role in allRoles">
                         <td>
                             {{role.Name}}
                         </td>
-                        <td>{{role.Read}}</td>
-                        <td>{{role.Write}}</td>
                         <td><span ng-repeat="user in role.Users">{{user.Username}}, </span></td>
+                        <td><span ng-repeat="permission in role.Permissions">{{permission.Name}}, </span></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div>Permissions status in DB:</div>
+                <table class="table">
+                    <tr>
+                        <th>Permission</th>
+                        <th>Read</th>
+                        <th>Write</th>
+                    </tr>
+                    <tr ng-repeat="permission in allPermissions">
+                        <td>
+                            {{permission.Name}}
+                        </td>
+                        <td>{{permission.Read}}</td>
+                        <td>{{permission.Write}}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="col-md-6">
+                <div>Constraints status in DB:</div>
+                <table class="table">
+                    <tr>
+                        <th>Constraint</th>
+                        <th>Role 1</th>
+                        <th>Role 2</th>
+                    </tr>
+                    <tr ng-repeat="constraint in allConstraints">
+                        <td>
+                            {{constraint.Id}}
+                        </td>
+                        <td>{{constraint.Role1}}</td>
+                        <td>{{constraint.Role2}}</td>
                     </tr>
                 </table>
             </div>

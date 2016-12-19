@@ -241,6 +241,36 @@ namespace POSD_Tema1.Services
 
             allRes.Add("allRoles", roles);
 
+            IEnumerable<Permission> allPermissions = _dbEntities.Permissions.ToList();
+            List<object> permissions = new List<object>();
+
+            foreach (Permission permission in allPermissions)
+            {
+                permissions.Add(new
+                {
+                    permission.Name,
+                    permission.Read,
+                    permission.Write
+                });
+            }
+
+            allRes.Add("allPermissions", permissions);
+
+            IEnumerable<Constraint> allConstraints = _dbEntities.Constraints.ToList();
+            List<object> constraints = new List<object>();
+
+            foreach (Constraint constraint in allConstraints)
+            {
+                constraints.Add(new
+                {
+                    constraint.Id,
+                    Role1 = constraint.Role.Name,
+                    Role2 = constraint.Role1.Name
+                });
+            }
+
+            allRes.Add("allConstraints", constraints);
+
             return allRes;
         }
     }
