@@ -35,7 +35,7 @@ namespace POSD_Tema1.Services.RoleService
             return true;
         }
 
-        public void ChangeRights(string roleName, string rights) {
+        public void ChangeRights(string permissionName, string rights) {
             var read = false;
             var write = false;
 
@@ -54,9 +54,9 @@ namespace POSD_Tema1.Services.RoleService
                     break;
             }
 
-            var role = _dbEntities.Roles.FirstOrDefault(f => f.Name == roleName);
-            role.Read = read;
-            role.Write = write;
+            var permission = _dbEntities.Permissions.FirstOrDefault(f => f.Name == permissionName);
+            permission.Read = read;
+            permission.Write = write;
             _dbEntities.SaveChanges();
         }
 

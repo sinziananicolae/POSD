@@ -28,11 +28,14 @@ namespace POSD_Tema1.Data.Database
         }
     
         public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
-        public virtual DbSet<ACLforResource> ACLforResources { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+        public virtual DbSet<Constraint> Constraints { get; set; }
+        public virtual DbSet<Permission> Permissions { get; set; }
+        public virtual DbSet<PermissionForResource> PermissionForResources { get; set; }
+        public virtual DbSet<PermissionToRole> PermissionToRoles { get; set; }
         public virtual DbSet<Resource> Resources { get; set; }
         public virtual DbSet<ResourceType> ResourceTypes { get; set; }
         public virtual DbSet<Role> Roles { get; set; }

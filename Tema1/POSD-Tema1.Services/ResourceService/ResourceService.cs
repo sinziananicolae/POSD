@@ -95,27 +95,27 @@ namespace POSD_Tema1.Services
         public bool IsResourceReadable(Resource resource) {
             var read = false;
 
-            foreach (ACLforResource acl in resource.ACLforResources) {
-                if (acl.Role.Read == true) {
-                    read = true;
-                    break;
-                }
-            }
+            //foreach (ACLforResource acl in resource.ACLforResources) {
+            //    if (acl.Role.Read == true) {
+            //        read = true;
+            //        break;
+            //    }
+            //}
 
-            if (read == true) return read;
+            //if (read == true) return read;
 
-            while (resource.ParentId != null && read == false)
-            {
-                resource = _dbEntities.Resources.FirstOrDefault(f => f.Id == resource.ParentId);
-                foreach (ACLforResource acl in resource.ACLforResources)
-                {
-                    if (acl.Role.Read == true)
-                    {
-                        read = true;
-                        break;
-                    }
-                }
-            }
+            //while (resource.ParentId != null && read == false)
+            //{
+            //    resource = _dbEntities.Resources.FirstOrDefault(f => f.Id == resource.ParentId);
+            //    foreach (ACLforResource acl in resource.ACLforResources)
+            //    {
+            //        if (acl.Role.Read == true)
+            //        {
+            //            read = true;
+            //            break;
+            //        }
+            //    }
+            //}
 
             return read;
         }
@@ -124,29 +124,29 @@ namespace POSD_Tema1.Services
         {
             var write = false;
 
-            foreach (ACLforResource acl in resource.ACLforResources)
-            {
-                if (acl.Role.Write == true)
-                {
-                    write = true;
-                    break;
-                }
-            }
+            //foreach (ACLforResource acl in resource.ACLforResources)
+            //{
+            //    if (acl.Role.Write == true)
+            //    {
+            //        write = true;
+            //        break;
+            //    }
+            //}
 
-            if (write == true) return write;
+            //if (write == true) return write;
 
-            while (resource.ParentId != null && write == false)
-            {
-                resource = _dbEntities.Resources.FirstOrDefault(f => f.Id == resource.ParentId);
-                foreach (ACLforResource acl in resource.ACLforResources)
-                {
-                    if (acl.Role.Write == true)
-                    {
-                        write = true;
-                        break;
-                    }
-                }
-            }
+            //while (resource.ParentId != null && write == false)
+            //{
+            //    resource = _dbEntities.Resources.FirstOrDefault(f => f.Id == resource.ParentId);
+            //    foreach (ACLforResource acl in resource.ACLforResources)
+            //    {
+            //        if (acl.Role.Write == true)
+            //        {
+            //            write = true;
+            //            break;
+            //        }
+            //    }
+            //}
 
             return write;
         }
@@ -192,14 +192,14 @@ namespace POSD_Tema1.Services
             _dbEntities.SaveChanges();
         }
 
-        public void AddRights(string roleName, string resourceName) {
-            var role = _dbEntities.Roles.FirstOrDefault(f => f.Name == roleName);
+        public void AddRights(string permissionName, string resourceName) {
+            var permission = _dbEntities.Permissions.FirstOrDefault(f => f.Name == permissionName);
             var resource = _dbEntities.Resources.FirstOrDefault(f => f.FullPath == resourceName);
 
-            _dbEntities.ACLforResources.Add(new ACLforResource
+            _dbEntities.PermissionForResources.Add(new PermissionForResource
             {
-                ResourceId = resource.Id,
-                RoleId = role.Id
+                PermissionId = permission.Id,
+                ResourceId = resource.Id
             });
 
             _dbEntities.SaveChanges();
@@ -216,8 +216,8 @@ namespace POSD_Tema1.Services
                     resource.ResourceTypeId,
                     Level = resource.FullPath.Split('/').Count() - 1,
                     Owner = resource.User.Username,
-                    Roles = resource.ACLforResources.Select(f => new {
-                        f.Role.Name
+                    Permissions = resource.PermissionForResources.Select(f => new {
+                        f.Permission.Name
                     }).ToList()
                 });
             }
@@ -230,10 +230,11 @@ namespace POSD_Tema1.Services
             foreach (Role role in allRoles) {
                 roles.Add(new {
                     role.Name,
-                    role.Read,
-                    role.Write,
                     Users = role.UserInRoles.Select(f => new {
                         f.User.Username
+                    }).ToList(),
+                    Permissions = role.PermissionToRoles.Select(f => new {
+                        f.Permission.Name
                     }).ToList()
                 });
             }

@@ -17,17 +17,21 @@ namespace POSD_Tema1.Data.Database
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Role()
         {
-            this.ACLforResources = new HashSet<ACLforResource>();
+            this.Constraints = new HashSet<Constraint>();
+            this.Constraints1 = new HashSet<Constraint>();
+            this.PermissionToRoles = new HashSet<PermissionToRole>();
             this.UserInRoles = new HashSet<UserInRole>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
-        public Nullable<bool> Read { get; set; }
-        public Nullable<bool> Write { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ACLforResource> ACLforResources { get; set; }
+        public virtual ICollection<Constraint> Constraints { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Constraint> Constraints1 { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PermissionToRole> PermissionToRoles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserInRole> UserInRoles { get; set; }
     }

@@ -12,13 +12,13 @@ namespace POSD_Tema1.Data.Database
     using System;
     using System.Collections.Generic;
     
-    public partial class ACLforResource
+    public partial class PermissionForResource
     {
         public int Id { get; set; }
+        public int PermissionId { get; set; }
         public int ResourceId { get; set; }
-        public int RoleId { get; set; }
     
+        public virtual Permission Permission { get; set; }
         public virtual Resource Resource { get; set; }
-        public virtual Role Role { get; set; }
     }
 }

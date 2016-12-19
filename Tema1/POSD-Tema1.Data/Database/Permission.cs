@@ -12,25 +12,23 @@ namespace POSD_Tema1.Data.Database
     using System;
     using System.Collections.Generic;
     
-    public partial class Resource
+    public partial class Permission
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Resource()
+        public Permission()
         {
+            this.PermissionToRoles = new HashSet<PermissionToRole>();
             this.PermissionForResources = new HashSet<PermissionForResource>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
-        public int ResourceTypeId { get; set; }
-        public Nullable<int> OwnerId { get; set; }
-        public string Content { get; set; }
-        public string FullPath { get; set; }
-        public Nullable<int> ParentId { get; set; }
+        public Nullable<bool> Read { get; set; }
+        public Nullable<bool> Write { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PermissionToRole> PermissionToRoles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PermissionForResource> PermissionForResources { get; set; }
-        public virtual User User { get; set; }
-        public virtual ResourceType ResourceType { get; set; }
     }
 }
