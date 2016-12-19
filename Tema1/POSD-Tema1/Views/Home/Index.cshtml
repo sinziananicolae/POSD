@@ -96,6 +96,7 @@
                                 <option value="8">Add Permission To Role</option>
                                 <option value="9">Change Permission Rights</option>
                                 <option value="10">Revoke Role</option>
+                                <option value="11">Create Constraint</option>
                             </select>
                         </div>
                     </div>
@@ -104,6 +105,20 @@
                         <label class="control-label col-sm-3" for="rolename">Role Name:</label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" name="rolename" placeholder="Role name" ng-model="rootForm.roleName" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12" ng-if="rootMethodType == 11">
+                        <label class="control-label col-sm-3" for="rolename">Role Name 1:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="rolename1" placeholder="Role name 1" ng-model="rootForm.roleName1" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12" ng-if="rootMethodType == 11">
+                        <label class="control-label col-sm-3" for="rolename">Role Name 2:</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" name="rolename2" placeholder="Role name 2" ng-model="rootForm.roleName2" required />
                         </div>
                     </div>
 
@@ -125,7 +140,7 @@
                         <label class="control-label col-sm-3" for="rights">Rights:</label>
                         <div class="col-sm-6">
                             <select class="form-control" name="rights" ng-model="rootForm.rights" required>
-                                <option value="none">No Rights</option>
+                                @*<option value="none">No Rights</option>*@
                                 <option value="r">Read</option>
                                 <option value="w">Write</option>
                                 <option value="rw">Read & Write</option>

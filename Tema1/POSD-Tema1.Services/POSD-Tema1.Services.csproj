@@ -49,6 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConstraintsService\ConstraintsService.cs" />
+    <Compile Include="PermissionService\PermissionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceService\ResourceService.cs" />
     <Compile Include="RoleService\RoleService.cs" />

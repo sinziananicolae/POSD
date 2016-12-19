@@ -29,12 +29,18 @@
                     break;
                 case "7":
                     sendRequest("create-permission", form);
+                    break;
                 case "8":
                     sendRequest("add-permission-to-role", form);
+                    break;
                 case "9":
                     sendRequest("change-permission-rights", form);
+                    break;
                 case "10":
                     sendRequest("revoke-role", form);
+                    break;
+                case "11":
+                    sendRequest("create-constraint", form);
                     break;
             }
         }
@@ -56,6 +62,8 @@
                         $scope.response = res.data;
                         $scope.allResources = res.data.allData.allResources;
                         $scope.allRoles = res.data.allData.allRoles;
+                        $scope.allPermissions = res.data.allData.allPermissions;
+                        $scope.allConstraints = res.data.allData.allConstraints;
                         $scope.$apply();
                     }, 500);
                 },
@@ -76,6 +84,8 @@
                     $scope.response = res.data;
                     $scope.allResources = res.data.allData.allResources;
                     $scope.allRoles = res.data.allData.allRoles;
+                    $scope.allPermissions = res.data.allData.allPermissions;
+                    $scope.allConstraints = res.data.allData.allConstraints;
                 },
                 function (err) {
                     console.log('error');

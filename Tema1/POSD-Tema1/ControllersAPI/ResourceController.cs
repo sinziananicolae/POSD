@@ -1,5 +1,6 @@
 ﻿using POSD_Tema1.Models;
 using POSD_Tema1.Services;
+using POSD_Tema1.Services.PermissionService;
 using POSD_Tema1.Services.RoleService;
 using POSD_Tema1.Services.UserService;
 using System;
@@ -16,12 +17,14 @@ namespace POSD_Tema1.ControllersAPI
         private ResourceService _resourceService;
         private UserService _userService;
         private RoleService _roleService;
+        private PermissionService _permissionService;
 
         public ResourceController()
         {
             _resourceService = new ResourceService();
             _userService = new UserService();
             _roleService = new RoleService();
+            _permissionService = new PermissionService();
         }
 
         public IEnumerable<object> Get()
@@ -138,8 +141,8 @@ namespace POSD_Tema1.ControllersAPI
         }
 
         [HttpPost]
-        [Route("api/add-rights")]
-        public Response AddRights([FromBody]ResourceModel resourceModel)
+        [Route("api/assign-permission")]
+        public Response AssignPermission([FromBody]ResourceModel resourceModel)
         {
             Response reqResponse = new Response();
 
@@ -154,7 +157,7 @@ namespace POSD_Tema1.ControllersAPI
 
             if (!_resourceService.IsUserOwner(resourceInfo.fullResourcePath, userId))
             {
-                reqResponse.SetResponse(401, "Not Authorized", "You are not allowed to change the roles of the selected resource.", null);
+                reqResponse.SetResponse(401, "Not Authorized", "You are not allowed to change the permissions of the selected resource.", null);
                 goto Finish;
             }
 
@@ -164,13 +167,13 @@ namespace POSD_Tema1.ControllersAPI
                 goto Finish;
             }
 
-            if (!_roleService.ExistsRole(resourceModel.roleName))
+            if (!_permissionService.ExistsPermission(resourceModel.permissionName))
             {
-                reqResponse.SetResponse(500, "Not Existing", "Role '" + resourceModel.roleName + "' does not exist in the system.", null);
+                reqResponse.SetResponse(500, "Not Existing", "Permission '" + resourceModel.permissionName + "' does not exist in the system.", null);
                 goto Finish;
             }
 
-            _resourceService.AddRights(resourceModel.roleName, resourceModel.resourceName);
+            _permissionService.AssignPermissionToResource(resourceModel.permissionName, resourceModel.resourceName);
             reqResponse = new Response();
 
         Finish:

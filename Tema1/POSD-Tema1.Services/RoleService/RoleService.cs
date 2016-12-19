@@ -35,31 +35,6 @@ namespace POSD_Tema1.Services.RoleService
             return true;
         }
 
-        public void ChangeRights(string permissionName, string rights) {
-            var read = false;
-            var write = false;
-
-            switch (rights)
-            {
-                case "r":
-                    read = true;
-                    break;
-                case "w":
-                    write = true;
-                    break;
-                case "rw":
-                case "wr":
-                    read = true;
-                    write = true;
-                    break;
-            }
-
-            var permission = _dbEntities.Permissions.FirstOrDefault(f => f.Name == permissionName);
-            permission.Read = read;
-            permission.Write = write;
-            _dbEntities.SaveChanges();
-        }
-
         public void AssignRole(string roleName, string userName) {
             var role = _dbEntities.Roles.FirstOrDefault(f => f.Name == roleName);
             var user = _dbEntities.Users.FirstOrDefault(f => f.Username == userName);
@@ -72,12 +47,35 @@ namespace POSD_Tema1.Services.RoleService
             _dbEntities.SaveChanges();
         }
 
+        public void RevokeRole(string roleName, string userName)
+        {
+            var role = _dbEntities.Roles.FirstOrDefault(f => f.Name == roleName);
+            var user = _dbEntities.Users.FirstOrDefault(f => f.Username == userName);
+
+            var userInRole = _dbEntities.UserInRoles.FirstOrDefault(f => f.Role.Name == roleName && f.User.Username == userName);
+
+            _dbEntities.UserInRoles.Remove(userInRole);
+
+            _dbEntities.SaveChanges();
+        }
+
         public bool ExistsUserInRole(string roleName, string userName) {
             var userInRole = _dbEntities.UserInRoles.FirstOrDefault(f => f.Role.Name == roleName && f.User.Username == userName);
 
             if (userInRole == null)
                 return false;
 
+            return true;
+        }
+
+        public bool ExistsPermissionInRole(string roleName, string permissionName) {
+            var role = _dbEntities.Roles.FirstOrDefault(f => f.Name == roleName);
+            var permission = _dbEntities.Permissions.FirstOrDefault(f => f.Name == permissionName);
+
+            var permissionInRole = _dbEntities.PermissionToRoles.FirstOrDefault(f => f.PermissionId == permission.Id && f.RoleId == role.Id);
+
+            if (permissionInRole == null)
+                return false;
             return true;
         }
 

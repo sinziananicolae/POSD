@@ -205,6 +205,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="ControllersAPI\ConstraintController.cs" />
+    <Compile Include="ControllersAPI\PermissionController.cs" />
     <Compile Include="ControllersAPI\ResourceController.cs" />
     <Compile Include="ControllersAPI\RoleController.cs" />
     <Compile Include="ControllersAPI\UserController.cs" />
@@ -215,8 +217,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ConstraintModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\PermissionModel.cs" />
     <Compile Include="Models\ResourceModel.cs" />
     <Compile Include="Models\ResourcePathModel.cs" />
     <Compile Include="Models\Response.cs" />

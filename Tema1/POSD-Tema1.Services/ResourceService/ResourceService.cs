@@ -80,11 +80,11 @@ namespace POSD_Tema1.Services
             switch (type)
             {
                 case "r":
-                    if (IsResourceReadable(resource))
+                    if (IsResourceReadable(userId, resource))
                         return true;
                     break;
                 case "w":
-                    if (IsResourceWritable(resource))
+                    if (IsResourceWritable(userId, resource))
                         return true;
                     break;
             }
@@ -92,61 +92,80 @@ namespace POSD_Tema1.Services
             return false;
         }
 
-        public bool IsResourceReadable(Resource resource) {
+        public bool IsResourceReadable(int userId, Resource resource) {
             var read = false;
+            List<UserInRole> rolesOfUser = _dbEntities.UserInRoles.Where(f => f.UserId == userId).ToList();
+            List<int> permissionsOfUser = new List<int>();
 
-            //foreach (ACLforResource acl in resource.ACLforResources) {
-            //    if (acl.Role.Read == true) {
-            //        read = true;
-            //        break;
-            //    }
-            //}
+            foreach (UserInRole userInRole in rolesOfUser) {
+                List<int> permissionsOfRole = userInRole.Role.PermissionToRoles.Select(f => f.PermissionId).ToList();
+                foreach (int permissionId in permissionsOfRole)
+                    permissionsOfUser.Add(permissionId);
+            }
 
-            //if (read == true) return read;
+            foreach (PermissionForResource permissionForResource in resource.PermissionForResources)
+            {
+                if (permissionsOfUser.Contains(permissionForResource.PermissionId) && permissionForResource.Permission.Read == true)
+                {
+                    read = true;
+                    break;
+                }
+            }
 
-            //while (resource.ParentId != null && read == false)
-            //{
-            //    resource = _dbEntities.Resources.FirstOrDefault(f => f.Id == resource.ParentId);
-            //    foreach (ACLforResource acl in resource.ACLforResources)
-            //    {
-            //        if (acl.Role.Read == true)
-            //        {
-            //            read = true;
-            //            break;
-            //        }
-            //    }
-            //}
+            if (read == true) return read;
+
+            while (resource.ParentId != null && read == false)
+            {
+                resource = _dbEntities.Resources.FirstOrDefault(f => f.Id == resource.ParentId);
+                foreach (PermissionForResource permissionForResource in resource.PermissionForResources)
+                {
+                    if (permissionsOfUser.Contains(permissionForResource.PermissionId) && permissionForResource.Permission.Read == true)
+                    {
+                        read = true;
+                        break;
+                    }
+                }
+            }
 
             return read;
         }
 
-        public bool IsResourceWritable(Resource resource)
+        public bool IsResourceWritable(int userId, Resource resource)
         {
             var write = false;
+            List<UserInRole> rolesOfUser = _dbEntities.UserInRoles.Where(f => f.UserId == userId).ToList();
+            List<int> permissionsOfUser = new List<int>();
 
-            //foreach (ACLforResource acl in resource.ACLforResources)
-            //{
-            //    if (acl.Role.Write == true)
-            //    {
-            //        write = true;
-            //        break;
-            //    }
-            //}
+            foreach (UserInRole userInRole in rolesOfUser)
+            {
+                List<int> permissionsOfRole = userInRole.Role.PermissionToRoles.Select(f => f.PermissionId).ToList();
+                foreach (int permissionId in permissionsOfRole)
+                    permissionsOfUser.Add(permissionId);
+            }
 
-            //if (write == true) return write;
+            foreach (PermissionForResource permissionForResource in resource.PermissionForResources)
+            {
+                if (permissionsOfUser.Contains(permissionForResource.PermissionId) && permissionForResource.Permission.Write == true)
+                {
+                    write = true;
+                    break;
+                }
+            }
 
-            //while (resource.ParentId != null && write == false)
-            //{
-            //    resource = _dbEntities.Resources.FirstOrDefault(f => f.Id == resource.ParentId);
-            //    foreach (ACLforResource acl in resource.ACLforResources)
-            //    {
-            //        if (acl.Role.Write == true)
-            //        {
-            //            write = true;
-            //            break;
-            //        }
-            //    }
-            //}
+            if (write == true) return write;
+
+            while (resource.ParentId != null && write == false)
+            {
+                resource = _dbEntities.Resources.FirstOrDefault(f => f.Id == resource.ParentId);
+                foreach (PermissionForResource permissionForResource in resource.PermissionForResources)
+                {
+                    if (permissionsOfUser.Contains(permissionForResource.PermissionId) && permissionForResource.Permission.Write == true)
+                    {
+                        write = true;
+                        break;
+                    }
+                }
+            }
 
             return write;
         }
@@ -189,19 +208,6 @@ namespace POSD_Tema1.Services
         {
             var resource = _dbEntities.Resources.Where(f => f.FullPath == resourceName).FirstOrDefault();
             resource.Content = value;
-            _dbEntities.SaveChanges();
-        }
-
-        public void AddRights(string permissionName, string resourceName) {
-            var permission = _dbEntities.Permissions.FirstOrDefault(f => f.Name == permissionName);
-            var resource = _dbEntities.Resources.FirstOrDefault(f => f.FullPath == resourceName);
-
-            _dbEntities.PermissionForResources.Add(new PermissionForResource
-            {
-                PermissionId = permission.Id,
-                ResourceId = resource.Id
-            });
-
             _dbEntities.SaveChanges();
         }
 
