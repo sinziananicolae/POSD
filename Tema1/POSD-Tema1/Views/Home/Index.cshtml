@@ -91,6 +91,7 @@
                         <div class="col-sm-6">
                             <select class="form-control" name="methodTypeRoot" ng-model="rootMethodType" required>
                                 <option value="5">Create Role</option>
+                                <option value="12">Create Hierarchy</option>
                                 <option value="6">Assign Role</option>
                                 <option value="7">Create Permission</option>
                                 <option value="8">Add Permission To Role</option>
@@ -108,15 +109,17 @@
                         </div>
                     </div>
 
-                    <div class="form-group col-md-12" ng-if="rootMethodType == 11">
-                        <label class="control-label col-sm-3" for="rolename">Role Name 1:</label>
+                    <div class="form-group col-md-12" ng-if="rootMethodType == 11 || rootMethodType == 12">
+                        <label class="control-label col-sm-3" for="rolename" ng-if="rootMethodType == 11">Role Name 1:</label>
+                        <label class="control-label col-sm-3" for="rolename" ng-if="rootMethodType == 12">Child role name:</label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" name="rolename1" placeholder="Role name 1" ng-model="rootForm.roleName1" required />
                         </div>
                     </div>
 
-                    <div class="form-group col-md-12" ng-if="rootMethodType == 11">
-                        <label class="control-label col-sm-3" for="rolename">Role Name 2:</label>
+                    <div class="form-group col-md-12" ng-if="rootMethodType == 11 || rootMethodType == 12">
+                        <label class="control-label col-sm-3" for="rolename" ng-if="rootMethodType == 11">Role Name 2:</label>
+                        <label class="control-label col-sm-3" for="rolename" ng-if="rootMethodType == 12">Parent role name:</label>
                         <div class="col-sm-6">
                             <input type="text" class="form-control" name="rolename2" placeholder="Role name 2" ng-model="rootForm.roleName2" required />
                         </div>
@@ -193,6 +196,7 @@
                 <table class="table">
                     <tr>
                         <th>Role</th>
+                        <th>Parent</th>
                         <th>Users</th>
                         <th>Permissions</th>
                     </tr>
@@ -200,6 +204,7 @@
                         <td>
                             {{role.Name}}
                         </td>
+                        <td>{{role.ParentRoleName}}</td>
                         <td><span ng-repeat="user in role.Users">{{user.Username}}, </span></td>
                         <td><span ng-repeat="permission in role.Permissions">{{permission.Name}}, </span></td>
                     </tr>

@@ -195,5 +195,49 @@ namespace POSD_Tema1.ControllersAPI
         Finish:
             return reqResponse;
         }
+
+        [HttpPost]
+        [Route("api/create-hierarchy")]
+        public Response CreateHierarchy([FromBody]ConstraintModel roleModel)
+        {
+            Response reqResponse = new Response();
+
+            if (roleModel.username != "root")
+            {
+                reqResponse.SetResponse(401, "Not Authorized", "You are not authorized to create a constraint!", null);
+                goto Finish;
+            }
+
+            int userId = _userService.GetUser(roleModel.username, roleModel.password);
+            if (userId == -1)
+            {
+                reqResponse.SetResponse(401, "Not Authorized", "Invalid credentials inserted!", null);
+                goto Finish;
+            }
+
+            if (!_roleService.ExistsRole(roleModel.roleName1))
+            {
+                reqResponse.SetResponse(500, "Not Existing", "Role '" + roleModel.roleName1 + "' does not exist in the system.", null);
+                goto Finish;
+            }
+
+            if (!_roleService.ExistsRole(roleModel.roleName2))
+            {
+                reqResponse.SetResponse(500, "Not Existing", "Role '" + roleModel.roleName2 + "' does not exist in the system.", null);
+                goto Finish;
+            }
+
+            if (_constraintsService.ExistsConstraint(roleModel.roleName1, roleModel.roleName2))
+            {
+                reqResponse.SetResponse(500, "Forbidden!", "There is a contraint that prevents the creation of a hierarchy between  '" + roleModel.roleName1 + "' and '" + roleModel.roleName2 + "'.", null);
+                goto Finish;
+            }
+
+            _roleService.CreateHierarchy(roleModel.roleName1, roleModel.roleName2);
+            reqResponse = new Response();
+
+        Finish:
+            return reqResponse;
+        }
     }
 }

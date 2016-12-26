@@ -124,6 +124,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="ParentId" Type="int" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -256,6 +257,18 @@
             </Principal>
             <Dependent Role="Resource">
               <PropertyRef Name="ResourceTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Role__ParentId__151B244E">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="Role1" Type="Self.Role" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Role1">
+              <PropertyRef Name="ParentId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -423,6 +436,10 @@
             <End Role="ResourceType" EntitySet="ResourceType" />
             <End Role="Resource" EntitySet="Resource" />
           </AssociationSet>
+          <AssociationSet Name="FK__Role__ParentId__151B244E" Association="Self.FK__Role__ParentId__151B244E">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Role1" EntitySet="Role" />
+          </AssociationSet>
           <AssociationSet Name="FK__UserInRol__RoleI__6383C8BA" Association="Self.FK__UserInRol__RoleI__6383C8BA">
             <End Role="Role" EntitySet="Role" />
             <End Role="UserInRole" EntitySet="UserInRole" />
@@ -537,6 +554,10 @@
           <AssociationSet Name="FK__Resource__Resour__31EC6D26" Association="Model.FK__Resource__Resour__31EC6D26">
             <End Role="ResourceType" EntitySet="ResourceTypes" />
             <End Role="Resource" EntitySet="Resources" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Role__ParentId__151B244E" Association="Model.FK__Role__ParentId__151B244E">
+            <End Role="Role" EntitySet="Roles" />
+            <End Role="Role1" EntitySet="Roles" />
           </AssociationSet>
           <AssociationSet Name="FK__UserInRol__RoleI__6383C8BA" Association="Model.FK__UserInRol__RoleI__6383C8BA">
             <End Role="Role" EntitySet="Roles" />
@@ -691,9 +712,12 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ParentId" Type="Int32" />
           <NavigationProperty Name="Constraints" Relationship="Model.FK__Constrain__RoleI__0E6E26BF" FromRole="Role" ToRole="Constraint" />
           <NavigationProperty Name="Constraints1" Relationship="Model.FK__Constrain__RoleI__0F624AF8" FromRole="Role" ToRole="Constraint" />
           <NavigationProperty Name="PermissionToRoles" Relationship="Model.FK__Permissio__RoleI__05D8E0BE" FromRole="Role" ToRole="PermissionToRole" />
+          <NavigationProperty Name="Role1" Relationship="Model.FK__Role__ParentId__151B244E" FromRole="Role" ToRole="Role1" />
+          <NavigationProperty Name="Role2" Relationship="Model.FK__Role__ParentId__151B244E" FromRole="Role1" ToRole="Role" />
           <NavigationProperty Name="UserInRoles" Relationship="Model.FK__UserInRol__RoleI__6383C8BA" FromRole="Role" ToRole="UserInRole" />
         </EntityType>
         <EntityType Name="sysdiagram">
@@ -859,6 +883,18 @@
             </Principal>
             <Dependent Role="Resource">
               <PropertyRef Name="ResourceTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Role__ParentId__151B244E">
+          <End Type="Model.Role" Role="Role" Multiplicity="0..1" />
+          <End Type="Model.Role" Role="Role1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Role1">
+              <PropertyRef Name="ParentId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -1040,6 +1076,7 @@
           <EntitySetMapping Name="Roles">
             <EntityTypeMapping TypeName="Model.Role">
               <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>

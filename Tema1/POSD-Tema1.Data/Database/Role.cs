@@ -20,11 +20,13 @@ namespace POSD_Tema1.Data.Database
             this.Constraints = new HashSet<Constraint>();
             this.Constraints1 = new HashSet<Constraint>();
             this.PermissionToRoles = new HashSet<PermissionToRole>();
+            this.Role1 = new HashSet<Role>();
             this.UserInRoles = new HashSet<UserInRole>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
+        public Nullable<int> ParentId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Constraint> Constraints { get; set; }
@@ -32,6 +34,9 @@ namespace POSD_Tema1.Data.Database
         public virtual ICollection<Constraint> Constraints1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PermissionToRole> PermissionToRoles { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Role> Role1 { get; set; }
+        public virtual Role Role2 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserInRole> UserInRoles { get; set; }
     }

@@ -92,6 +92,19 @@ namespace POSD_Tema1.Services
             return false;
         }
 
+        public List<int> GetPermissionsOfUser(List<int> permissionsOfRole, List<int> permissionsOfUser, int roleId)
+        {
+            foreach (int permissionId in permissionsOfRole)
+                permissionsOfUser.Add(permissionId);
+            List<Role> childrenOfRole = _dbEntities.Roles.Where(f => f.ParentId == roleId).ToList();
+            foreach (Role childRole in childrenOfRole)
+            {
+                permissionsOfRole = _dbEntities.PermissionToRoles.Where(f => f.RoleId == childRole.Id).Select(f => f.PermissionId).ToList();
+                return GetPermissionsOfUser(permissionsOfRole, permissionsOfUser, childRole.Id);
+            }
+            return permissionsOfRole;
+        }
+
         public bool IsResourceReadable(int userId, Resource resource) {
             var read = false;
             List<UserInRole> rolesOfUser = _dbEntities.UserInRoles.Where(f => f.UserId == userId).ToList();
@@ -99,8 +112,8 @@ namespace POSD_Tema1.Services
 
             foreach (UserInRole userInRole in rolesOfUser) {
                 List<int> permissionsOfRole = userInRole.Role.PermissionToRoles.Select(f => f.PermissionId).ToList();
-                foreach (int permissionId in permissionsOfRole)
-                    permissionsOfUser.Add(permissionId);
+
+                permissionsOfUser = GetPermissionsOfUser(permissionsOfRole, permissionsOfUser, userInRole.RoleId);
             }
 
             foreach (PermissionForResource permissionForResource in resource.PermissionForResources)
@@ -139,8 +152,8 @@ namespace POSD_Tema1.Services
             foreach (UserInRole userInRole in rolesOfUser)
             {
                 List<int> permissionsOfRole = userInRole.Role.PermissionToRoles.Select(f => f.PermissionId).ToList();
-                foreach (int permissionId in permissionsOfRole)
-                    permissionsOfUser.Add(permissionId);
+
+                permissionsOfUser = GetPermissionsOfUser(permissionsOfRole, permissionsOfUser, userInRole.RoleId);
             }
 
             foreach (PermissionForResource permissionForResource in resource.PermissionForResources)
@@ -234,11 +247,13 @@ namespace POSD_Tema1.Services
             List<object> roles = new List<object>();
 
             foreach (Role role in allRoles) {
+                var parentRole = _dbEntities.Roles.FirstOrDefault(f => f.Id == role.ParentId);
                 roles.Add(new {
                     role.Name,
                     Users = role.UserInRoles.Select(f => new {
                         f.User.Username
                     }).ToList(),
+                    ParentRoleName = parentRole != null ? parentRole.Name : "",
                     Permissions = role.PermissionToRoles.Select(f => new {
                         f.Permission.Name
                     }).ToList()

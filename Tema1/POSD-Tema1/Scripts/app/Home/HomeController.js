@@ -42,6 +42,9 @@
                 case "11":
                     sendRequest("create-constraint", form);
                     break;
+                case "12":
+                    sendRequest("create-hierarchy", form);
+                    break;
             }
         }
 

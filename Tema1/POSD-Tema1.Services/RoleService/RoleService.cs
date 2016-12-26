@@ -79,5 +79,14 @@ namespace POSD_Tema1.Services.RoleService
             return true;
         }
 
+        public void CreateHierarchy(string juniorRoleName, string parentRoleName) {
+            var juniorRole = _dbEntities.Roles.FirstOrDefault(f => f.Name == juniorRoleName);
+            var parentRole = _dbEntities.Roles.FirstOrDefault(f => f.Name == parentRoleName);
+
+            juniorRole.ParentId = parentRole.Id;
+
+            _dbEntities.SaveChanges();
+        }
+
     }
 }
